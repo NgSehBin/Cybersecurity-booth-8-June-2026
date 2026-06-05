@@ -602,11 +602,11 @@ const posts = [
   {
     id: 1,
     clue: true,
-    
+    emoji: "🎂",
     // ── POST 1 IMAGE ──────────────────────────────────────
     // Suggested: a birthday celebration photo
     // Size: 300×300 px (square). Larger is fine — it will be cropped.
-    img: "images/birthday.png",  // e.g. "assets/posts/birthday.jpg"
+    img: "",  // e.g. "assets/posts/birthday.jpg"
     // ──────────────────────────────────────────────────────
     likes: "312 likes",
     date: "MARCH 14",
@@ -621,11 +621,11 @@ const posts = [
   {
     id: 2,
     clue: true,
-    
+    emoji: "🐶",
     // ── POST 2 IMAGE ──────────────────────────────────────
     // Suggested: a photo of the pet dog
     // Size: 300×300 px (square)
-    img: "images/dog.png",  // e.g. "assets/posts/biscuit.jpg"
+    img: "",  // e.g. "assets/posts/biscuit.jpg"
     // ──────────────────────────────────────────────────────
     likes: "284 likes",
     date: "FEBRUARY 8",
@@ -829,8 +829,8 @@ posts.forEach((post, idx) => {
   cell.setAttribute("role", "button");
   cell.setAttribute("tabindex", "0");
 
-  // Fallback emoji (shown when no image is set)
-  cell.innerHTML = `<div class="post-fallback">${post.emoji}</div>`;
+  // Empty cell — image will fill this when src is set
+  cell.innerHTML = `<div class="post-fallback"></div>`;
 
   // Real image (sits above fallback when src is provided)
   if (post.img) {
@@ -871,9 +871,9 @@ function openPost(idx) {
     imgWrap.appendChild(img);
     document.getElementById("modal-fallback").style.display = "none";
   } else {
-    document.getElementById("modal-fallback").textContent = p.emoji;
-    document.getElementById("modal-fallback").style.display = "flex";
-    imgWrap.style.background = "#1a1a2e";
+    document.getElementById("modal-fallback").textContent = "";
+    document.getElementById("modal-fallback").style.display = "none";
+    imgWrap.style.background = "#e9e9e9";
   }
 
   document.getElementById("modal-loc").textContent      = p.location;
