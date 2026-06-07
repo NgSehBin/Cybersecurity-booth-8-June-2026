@@ -1,399 +1,3 @@
-
-Claude finished the response
-At the left tab of the laptop got a fake social meida profile while at the right have a login screen of a bank acc. Student will investigate the social media to find out any answers to standard security questions (like birthday) to reset the acc password. The posts will have the answer/clues to let student guess and unloack the account.   By doing this booth, students should know exposing personal details online can put their personal security at risk.  
-
-refer above, make a simple html website copying instagram profile website, have 12 posts, and have some clues of his/her password/account gmail clue on 3 posts of 12
-
-Show more
-5 Jun
-
-Reading frontend design skill
-Reading frontend design skill
-Now I'll build the full dual-pane educational website — Instagram-style profile on the left, bank login on the right.
-
-
-Educational cybersecurity booth - fake Instagram profile + bank login
-Educational cybersecurity booth - fake Instagram profile + bank login
-bg: "clue",
-        img: "assets/posts/birthday.jpg",
-        likes: "312 likes",
-        date: "March 14",
-        location: "Birthday dinner",
-      },
-      {
-        title: "Biscuit",
-        icon: "PET",
-        bg: "clue",
-        img: "assets/posts/biscuit.jpg",
-        likes: "284 likes",
-        date: "February 8",
-        location: "Home Sweet Home",
-      },
-      {
-        title: "Spring Park",
-        icon: "PK",
-        bg: "c4",
-        img: "assets/posts/spring-park.jpg",
-        likes: "198 likes",
-        date: "January 22",
-        location: "City Park",
-      },
-      {
-        title: "Bali Trip",
-        icon: "SEA",
-        bg: "c3",
-        img: "assets/posts/bali-trip.jpg",
-        likes: "421 likes",
-        date: "December 28",
-        location: "Bali, Indonesia",
-      },
-      {
-        title: "Gaming",
-        icon: "GM",
-        bg: "c8",
-        img: "assets/posts/gaming.jpg",
-        likes: "156 likes",
-        date: "November 15",
-        location: "",
-      },
-      {
-        title: "Ramen",
-        icon: "FD",
-        bg: "c7",
-        img: "assets/posts/ramen.jpg",
-        likes: "203 likes",
-        date: "November 3",
-        location: "High Street Ramen",
-      },
-      {
-        title: "Exam Season",
-        icon: "BK",
-        bg: "c2",
-        img: "assets/posts/exam-season.jpg",
-        likes: "89 likes",
-        date: "October 20",
-        location: "Central Library",
-      },
-      {
-        title: "Home City",
-        icon: "HM",
-        bg: "clue",
-        img: "assets/posts/home-city.jpg",
-        likes: "177 likes",
-        date: "September 30",
-        location: "Sunshine Valley",
-      },
-      {
-        title: "Concert",
-        icon: "MU",
-        bg: "c5",
-        img: "assets/posts/concert.jpg",
-        likes: "264 likes",
-        date: "August 14",
-        location: "City Arena",
-      },
-      {
-        title: "Coffee",
-        icon: "CF",
-        bg: "c1",
-        img: "assets/posts/coffee.jpg",
-        likes: "143 likes",
-        date: "July 29",
-        location: "The Coffee Corner",
-      },
-      {
-        title: "Sunrise Run",
-        icon: "RUN",
-        bg: "c6",
-        img: "assets/posts/sunrise-run.jpg",
-        likes: "339 likes",
-        date: "June 21",
-        location: "West Beach",
-      },
-      {
-        title: "Painting",
-        icon: "ART",
-        bg: "c9",
-        img: "assets/posts/painting.jpg",
-        likes: "117 likes",
-        date: "May 5",
-        location: "",
-      button.className = "post";
-      button.setAttribute("aria-label", Open post: ${post.title});
-      button.innerHTML = 
-        <div class="post-card ${post.bg}">
-          <span class="symbol">${post.icon}</span>
-          <strong>${post.title}</strong>
-        <div class="post-card">
-          <img src="${post.img}" alt="${post.title} scene">
-          <span class="post-title">${post.title}</span>
-        </div>
-        <span class="overlay"><span>${post.likes}</span><span>${post.comments.length} comments</span></span>
-      ;
-    function openPost(index) {
-      const post = posts[index];
-      modalArt.className = modal-art ${post.bg};
-      modalArt.innerHTML = <span class="symbol">${post.icon}</span>;
-      modalArt.className = "modal-art";
-      modalArt.innerHTML = <img src="${post.img}" alt="${post.title} scene">;
-      modalLocation.textContent = post.location;
-      modalCaption.innerHTML = <strong>emma.j.2006</strong>${post.caption};
-      modalComments.innerHTML = post.comments
-
-refer this and make only the instagram page, use comment where i can put my selected picture inside the post, define the size needed
-
-Show more
-5 Jun
-
-Viewed a file, created a file, read a file
-Viewed a file, created a file, read a file
-Here's the Instagram-only page. Here's exactly how to plug in your images:
-
-Image sizes needed:
-
-Location	Size	Path
-Profile avatar	150×150 px	assets/profile/avatar.jpg
-Highlight covers (optional)	60×60 px	assets/highlights/*.jpg
-Post thumbnails (all 12)	300×300 px minimum (square)	assets/posts/*.jpg
-To add a photo, find the comment block for that post in the <script> section, e.g.:
-
-js
-// ── POST 1 IMAGE ──────────────────────────────────────
-// Suggested: a birthday celebration photo
-img: "",  // e.g. "assets/posts/birthday.jpg"
-Change the empty "" to your file path:
-
-js
-img: "assets/posts/birthday.jpg",
-Clue posts (the 3 that contain hidden personal info) are posts 1, 2, and 8 — they show a pulsing 🔍 badge and a yellow clue banner when opened. The clues are:
-
-Post 1 — birthday date (14 March 2006)
-Post 2 — first pet's name (Biscuit)
-Post 8 — home city (Sunshine Valley)
-
-Instagram profile
-Code · HTML 
-for now no need to show which post got clue but just show in the comment, let student go through all the posts
-
-5 Jun
-
-Viewed 4 files
-Viewed 4 files
-Now I'll remove all clue indicators — the yellow border, 🔍 badge, clue banner, and highlighted clue-tag styling in captions. The clues will only live naturally inside the post captions and comments as plain text.
-
-
-Edited 7 files
-Edited 7 files
-Now update the comment in the CSS post comment block to remove the clue posts mention:
-
-
-Clean up comment that mentions clue posts
-Clean up comment that mentions clue posts
-Also remove the .clue class highlight from the bio text:
-
-
-Edited a file, read a file
-Edited a file, read a file
-Done. All the visual clue indicators have been stripped out:
-
-No yellow border on any grid post
-No 🔍 badge on thumbnails
-No yellow clue banner inside the modal
-No highlighted text in captions or bio
-The personal info (birthday, pet name, home city) now just sits naturally in the captions and comments as plain readable text — students have to genuinely read through all 12 posts to piece it together, just like browsing a real profile.
-
-
-Instagram profile
-Code · HTML 
-no emoji needed in the post picture
-
-5 Jun
-
-Edited 2 files, read a file
-Edited 2 files, read a file
-Done — all emoji are removed from the post cells and the modal image area. Posts now show as plain grey squares until you drop your photos in via the img: fields in the JS data.
-
-
-Instagram profile
-Code · HTML 
-now move on to bank page, make it as simple as possible, can refer back what u do, but add a page ltr showing congrats (no need other thing). the login page should also look like a real bank
-
-6 Jun
-
-Viewed a file, created a file, read a file
-Viewed a file, created a file, read a file
-Here's the bank page. It has 3 screens:
-
-Page 1 — Login — looks like a real online banking portal with a blue side panel, username/password fields, remember me checkbox, and a "Forgot password?" link. Wrong password gives a realistic error.
-
-Page 2 — Reset Password — 3 security questions (pet name, date of birth, home city). Wrong answers highlight the incorrect fields in red. All 3 must match exactly.
-
-Page 3 — Congrats — shows the unlocked shield, lists all 3 answers that were found on Instagram, and gives the learning message about oversharing.
-
-The answers accepted are:
-
-Pet name → biscuit (case-insensitive)
-Date of birth → 14/03/2006 (a few formats accepted)
-City → anything containing sunshine
-
-Bank login
-Code · HTML 
-Page 1: Login Screen (The Front Door)
-
-Fields: Username/Email, Password, "Forgot Password?" link.
-Logic:
- 
-If they guess the exact password Finally18!! or Biscuit2006! (with correct username emma.j.2006), log them straight in and skip to Page 3 with a special "Master Hacker: Password Guessed!" banner.
-If they fail the password, they must click "Forgot Password". To proceed, they MUST enter the correct target email (emma.johansson06@gmail.com) or username (emma.j.2006). Page 2: Reset Password (The Backdoor & Defender Phase)
-
-Part 1: Security Questions. (Q1: Pet biscuit, Q2: DOB 14/03/2006, Q3: City sunshine). If wrong, highlight in red. If all 3 are right, reveal Part 2.
-Part 2: Set New Password. Show a password input field and a live "Password Strength" meter (Weak, Medium, Strong). The "Confirm Reset" button remains disabled UNTIL they type a password that hits at least "Medium".
-Page 3: Completion & Educational Debrief
-
-Visual: A success message or an "Unlocked Shield" icon.
-Content: This page is the lesson debrief. Please write a section that explains:
-What is OSINT? (Open-Source Intelligence) and how attackers use public social media data.
-The Flaw in Security Questions: Explain why they are dangerous (they act as passwords but people treat the answers as public facts).
-The Defense: Teach them the best practice is to lie on security questions and save those random answers in a password manager. suggested by gemini, i think its good to implement these for the bank login website
-Show more
-6 Jun
-
-Viewed 2 files
-Viewed 2 files
-Good, I have the full picture. Now I'll rewrite the file completely with all the new logic.
-
-
-Ran a command, read a file
-Ran a command, read a file
-Here's the full updated bank page. Here's how each part works:
-
-Page 1 — Login
-
-Entering emma.j.2006 or emma.johansson06@gmail.com + password Finally18!! or Biscuit2006! skips straight to the debrief with a purple "★ Master Hacker — Password Guessed!" banner
-Any wrong password shows an error; after 2 failures it nudges toward "Forgot Password"
-Clicking "Forgot Password" reveals an inline email gate — students must enter the correct username or email before they can proceed to the security questions
-Page 2 — Reset Password
-
-Part 1: 3 security questions with green ✅ / red ❌ per field; all 3 must pass to reveal Part 2
-Part 2: New password field with a live 5-level strength meter (Weak → Very Strong); the Confirm Reset button stays disabled until at least Medium strength is reached
-Page 3 — Debrief
-
-Three lesson cards covering: What is OSINT, The Flaw in Security Questions, and How to Defend Yourself
-The banner and answers panel adapt automatically depending on whether they guessed the password directly (hacker route) or reset it via OSINT
-
-Bank login
-Code · HTML 
-for the strength password can refer https://www.passwordmonster.com/, andfor security questions no need include the sample inside the answer box
-
-6 Jun
-
-Searched the web
-Searched the web
-Good. The key features from passwordmonster.com to replicate:
-
-Shows character count live
-Shows which criteria are met: Symbols, Numbers, Upper case, Lower case as live badges
-Shows "Time to crack" as the main strength output (e.g. "instantly", "3 hours", "4 years", "centuries")
-Clean, minimal UI — no coloured bar labels, just the crack-time as the headline
-Now I'll update just the strength meter section and remove placeholders from security question inputs.
-
-
-Viewed 2 files
-Viewed 2 files
-Now I have the full picture. I'll update the strength meter CSS + HTML + JS, and strip placeholders from the security question inputs.
-
-
-Edited 3 files
-Edited 3 files
-Now replace the checkStrength() JS function with the passwordmonster-style crack-time logic:
-
-
-Replace checkStrength JS with crack-time + chips logic
-Replace checkStrength JS with crack-time + chips logic
-Also update the sub-text to reflect "days" threshold instead of "Medium":
-
-
-Edited a file, read a file
-Edited a file, read a file
-Done. Here's what changed:
-
-Password strength meter — now mirrors passwordmonster.com's style:
-
-Live character count ("8 characters containing:")
-Five colour-coded criteria chips that light up as you type: Upper case, Lower case, Numbers, Symbols, 12+ chars
-A "Time to crack your password" headline that shows realistic estimates from "Instantly" → "seconds" → "hours" → "days" → "years" → "Centuries", calculated from charset size and password length
-"Confirm Reset" button only unlocks once the crack time reaches days or more
-Security questions — all placeholder text removed from the three answer boxes, blank inputs only.
-
-
-Bank login
-Code · HTML 
-add a transalation for this website (bahasa melayu
-
-6 Jun
-
-Viewed 2 files
-Viewed 2 files
-Good. I have the full file. I'll now rewrite it completely with a language toggle system using a translations object — a clean EN/BM switcher button in the header.
-
-
-Ran a command, read a file
-Ran a command, read a file
-Done. Here's what was added:
-
-Language toggle — an EN / BM pill button sits in the top-right of the header next to the nav links. The active language lights up in gold. Clicking switches the entire page instantly with no reload.
-
-Everything translates, including:
-
-All nav links, header, security strip
-All login form labels, buttons, placeholder hints, and error messages
-Forgot password gate, security questions (Q1–Q3), and their error messages (e.g. "nama haiwan peliharaan", "tarikh lahir")
-Password strength meter — chip labels (Huruf besar, Huruf kecil, Nombor, Simbol), crack-time units (saat, minit, jam, hari, bulan, tahun, Berabad-abad)
-All three lesson cards on the debrief page (OSINT, Kelemahan Soalan Keselamatan, Cara Melindungi Diri Anda)
-Both debrief routes (OSINT and Hacker), including the dynamic badge/title/description
-Footer links and copyright line
-
-Bank login
-Code · HTML 
-1780821217488_image.png
-its not compatible
-
-16:33
-The layout is clipping because the container is too wide for the viewport. I need to fix the responsive layout — make the header wrap properly, reduce the side panel width, and ensure the login card doesn't overflow.
-
-
-Edited 2 files, viewed a file
-Edited 2 files, viewed a file
-Now also fix the header itself to not overflow on small screens:
-
-
-Fix header CSS to prevent overflow
-Fix header CSS to prevent overflow
-Now fix the .login-side fixed width so it doesn't force horizontal scroll:
-
-
-Edited a file, read a file
-Edited a file, read a file
-Fixed. Here's what changed:
-
-Header — on narrow screens, the nav links hide and the logo + language toggle stack cleanly without overflowing
-Security strip — text now wraps instead of cutting off at the edge
-Login card — the blue side panel stacks above the form on small screens (instead of sitting side-by-side and clipping), and the feature list hides to keep it compact
-All panels (reset, debrief) — padding reduced on small screens so nothing bleeds out
-Footer — stacks vertically on narrow screens
-
-Bank login
-Code · HTML 
-
-
-
-
-
-Claude is AI and can make mistakes. Please double-check responses.
-
-
-raw
-Bank login · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -411,7 +15,7 @@ Bank login · HTML
     --font: 'Inter', sans-serif;
   }
   body { font-family: var(--font); background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; color: var(--text); }
- 
+
   /* ── HEADER ── */
   header { background: var(--blue); height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; flex-shrink: 0; overflow: hidden; }
   .bank-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
@@ -422,19 +26,19 @@ Bank login · HTML
   header nav { display: flex; gap: 24px; }
   header nav a { color: rgba(255,255,255,0.7); font-size: 13px; text-decoration: none; }
   header nav a:hover { color: #fff; }
- 
+
   /* Language toggle */
   .lang-toggle { display: flex; border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; overflow: hidden; }
   .lang-btn { padding: 4px 12px; font-size: 12px; font-weight: 600; font-family: var(--font); border: none; cursor: pointer; transition: background 0.15s, color 0.15s; background: transparent; color: rgba(255,255,255,0.6); letter-spacing: 0.03em; }
   .lang-btn.active { background: var(--gold); color: var(--blue); }
   .lang-btn:hover:not(.active) { color: #fff; }
- 
+
   /* ── SECURITY STRIP ── */
   .security-strip { background: #002068; padding: 7px 40px; display: flex; align-items: flex-start; gap: 8px; }
   .security-strip svg { flex-shrink: 0; margin-top: 2px; }
   .security-strip span { font-size: 11.5px; color: rgba(255,255,255,0.65); line-height: 1.5; }
   .security-strip span b { color: rgba(255,255,255,0.9); font-weight: 500; }
- 
+
   /* ── RESPONSIVE ── */
   @media (max-width: 860px) {
     header { padding: 8px 16px; height: auto; min-height: 56px; }
@@ -442,28 +46,28 @@ Bank login · HTML
     .header-right { gap: 12px; }
     .security-strip { padding: 7px 16px; }
     main { padding: 20px 12px 32px; }
- 
+
     .login-wrap { flex-direction: column; }
     .login-side { width: 100%; padding: 24px 20px; }
     .login-side h2 { font-size: 18px; }
     .side-features { display: none; }
     .login-form-wrap { padding: 24px 20px; }
- 
+
     .reset-body { padding: 20px; }
     .reset-header { padding: 16px 20px; }
     .debrief-answers { margin: 16px; }
     .debrief-top { padding: 28px 20px 24px; }
     .debrief-body { padding: 0 16px 24px; }
- 
+
     footer { padding: 12px 16px; flex-direction: column; gap: 8px; text-align: center; }
     footer nav { justify-content: center; flex-wrap: wrap; gap: 12px; }
   }
- 
+
   /* ── MAIN ── */
   main { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 36px 20px 40px; }
   .page { display: none; width: 100%; justify-content: center; }
   .page.active { display: flex; }
- 
+
   /* ── SHARED FORM ── */
   .form-group { margin-bottom: 16px; }
   .form-label { display: block; font-size: 11.5px; font-weight: 600; color: #374151; margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
@@ -484,7 +88,7 @@ Bank login · HTML
   .form-footer { margin-top: auto; padding-top: 20px; display: flex; gap: 16px; flex-wrap: wrap; }
   .form-footer a { font-size: 11px; color: var(--muted); text-decoration: none; }
   .form-footer a:hover { text-decoration: underline; }
- 
+
   /* ── PAGE 1 LOGIN ── */
   .login-wrap { display: flex; background: var(--white); border-radius: 4px; box-shadow: 0 2px 20px rgba(0,48,135,0.10); overflow: hidden; width: 100%; max-width: 820px; }
   .login-side { background: linear-gradient(160deg, #003087 0%, #0051a8 100%); width: 260px; min-width: 0; flex-shrink: 0; padding: 44px 32px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -509,7 +113,7 @@ Bank login · HTML
   .forgot-gate.show { display: block; }
   .forgot-gate-title { font-size: 13px; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
   .forgot-gate-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
- 
+
   /* ── PAGE 2 RESET ── */
   .reset-wrap { background: var(--white); border-radius: 4px; box-shadow: 0 2px 20px rgba(0,48,135,0.10); width: 100%; max-width: 520px; overflow: hidden; }
   .reset-header { background: var(--blue); padding: 20px 32px; display: flex; align-items: center; gap: 12px; }
@@ -525,7 +129,7 @@ Bank login · HTML
   .new-pass-section.show { display: block; }
   .new-pass-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
   .new-pass-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
- 
+
   /* ── STRENGTH METER ── */
   .strength-wrap { margin-top: 10px; }
   .strength-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -545,7 +149,7 @@ Bank login · HTML
   .strength-crack-time.weak { color: #ea580c; }
   .strength-crack-time.medium { color: #ca8a04; }
   .strength-crack-time.strong { color: #16a34a; }
- 
+
   /* ── PAGE 3 DEBRIEF ── */
   .debrief-wrap { background: var(--white); border-radius: 4px; box-shadow: 0 2px 20px rgba(0,48,135,0.10); width: 100%; max-width: 680px; overflow: hidden; }
   .debrief-top { padding: 36px 40px 30px; text-align: center; }
@@ -574,7 +178,7 @@ Bank login · HTML
   .lesson-card-body strong { color: var(--text); }
   .tip-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 3px; padding: 10px 14px; margin-top: 10px; font-size: 12.5px; color: #14532d; line-height: 1.6; }
   .tip-box b { display: block; margin-bottom: 3px; font-size: 13px; }
- 
+
   /* ── FOOTER ── */
   footer { background: var(--blue); padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   footer span { font-size: 11px; color: rgba(255,255,255,0.4); }
@@ -584,7 +188,7 @@ Bank login · HTML
 </style>
 </head>
 <body>
- 
+
 <header>
   <a class="bank-logo" href="#">
     <div class="logo-mark">SB</div>
@@ -603,14 +207,14 @@ Bank login · HTML
     </div>
   </div>
 </header>
- 
+
 <div class="security-strip">
   <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
   <span data-i18n="security.strip"><b>secure and encrypted</b></span>
 </div>
- 
+
 <main>
- 
+
   <!-- PAGE 1: LOGIN -->
   <div class="page active" id="page-login">
     <div class="login-wrap">
@@ -635,11 +239,11 @@ Bank login · HTML
         </div>
         <div class="side-bottom" data-i18n="login.side.copy">© 2026 SecureBank Berhad. All rights reserved.</div>
       </div>
- 
+
       <div class="login-form-wrap">
         <div class="form-title" data-i18n="login.form.title">Sign in to your account</div>
         <div class="form-sub"   data-i18n="login.form.sub">Enter your credentials to access Online Banking.</div>
- 
+
         <div class="form-group">
           <label class="form-label" data-i18n="login.label.user">Username / Email</label>
           <input class="form-input" id="inp-user" type="text" placeholder="e.g. xxxxx@gmail.com" autocomplete="username">
@@ -648,7 +252,7 @@ Bank login · HTML
           <label class="form-label" data-i18n="login.label.pass">Password</label>
           <input class="form-input" id="inp-pass" type="password" autocomplete="current-password">
         </div>
- 
+
         <div class="form-row">
           <label class="form-check">
             <input type="checkbox" id="remember-me">
@@ -656,10 +260,10 @@ Bank login · HTML
           </label>
           <a class="form-link" onclick="showForgotGate()" data-i18n="login.forgot">Forgot password?</a>
         </div>
- 
+
         <button class="btn-primary" onclick="tryLogin()" data-i18n="login.btn">Sign In</button>
         <div class="msg-box" id="login-msg"></div>
- 
+
         <div class="forgot-gate" id="forgot-gate">
           <div class="forgot-gate-title" data-i18n="gate.title">🔒 Verify Account Identity</div>
           <div class="forgot-gate-sub"   data-i18n="gate.sub">To proceed with a password reset, please confirm the username or email address linked to this account.</div>
@@ -669,7 +273,7 @@ Bank login · HTML
           <button class="btn-primary" style="padding:11px;" onclick="tryGate()" data-i18n="gate.btn">Continue to Security Questions →</button>
           <div class="msg-box" id="gate-msg"></div>
         </div>
- 
+
         <div class="form-footer">
           <a href="#" data-i18n="footer.privacy">Privacy Policy</a>
           <a href="#" data-i18n="footer.terms">Terms &amp; Conditions</a>
@@ -679,7 +283,7 @@ Bank login · HTML
       </div>
     </div>
   </div>
- 
+
   <!-- PAGE 2: RESET -->
   <div class="page" id="page-reset">
     <div class="reset-wrap">
@@ -690,10 +294,10 @@ Bank login · HTML
           <p  data-i18n="reset.header.sub">Answer your security questions, then set a new password.</p>
         </div>
       </div>
- 
+
       <div class="reset-body">
         <a class="reset-back" onclick="goTo('page-login')" data-i18n="reset.back">← Back to Sign In</a>
- 
+
         <div class="form-group">
           <div class="sq-label" data-i18n="sq1.label">Security Question 1</div>
           <div class="sq-question" data-i18n="sq1.q">What is the name of your first pet?</div>
@@ -709,14 +313,14 @@ Bank login · HTML
           <div class="sq-question" data-i18n="sq3.q">What city did you grow up in?</div>
           <input class="form-input" id="sq3" type="text">
         </div>
- 
+
         <button class="btn-primary" onclick="trySecurityQs()" data-i18n="reset.verify.btn">Verify Identity</button>
         <div class="msg-box" id="sq-msg"></div>
- 
+
         <div class="new-pass-section" id="new-pass-section">
           <div class="new-pass-title" data-i18n="newpass.title">✅ Identity Verified — Set a New Password</div>
           <div class="new-pass-sub"   data-i18n="newpass.sub">Choose a strong password. The "Confirm Reset" button unlocks once your password would take at least <strong>days</strong> to crack.</div>
- 
+
           <div class="form-group">
             <label class="form-label" data-i18n="newpass.label">New Password</label>
             <input class="form-input" id="new-pass" type="password" oninput="checkStrength()">
@@ -745,7 +349,7 @@ Bank login · HTML
       </div>
     </div>
   </div>
- 
+
   <!-- PAGE 3: DEBRIEF -->
   <div class="page" id="page-debrief">
     <div class="debrief-wrap">
@@ -755,14 +359,14 @@ Bank login · HTML
         <h1 id="debrief-title">You're in!</h1>
         <p  id="debrief-desc">You successfully accessed Emma's bank account.</p>
       </div>
- 
+
       <div class="debrief-answers" id="debrief-answers">
         <h3 id="debrief-answers-title" data-i18n="debrief.ans.title">Clues found on Instagram</h3>
         <div class="answer-row"><span data-i18n="debrief.ans.pet">First pet's name</span><span>Biscuit</span></div>
         <div class="answer-row" id="ans-row-dob"><span data-i18n="debrief.ans.dob">Date of birth</span><span>14/03/2006</span></div>
         <div class="answer-row" id="ans-row-city"><span data-i18n="debrief.ans.city">City grew up in</span><span>Sunshine Valley</span></div>
       </div>
- 
+
       <div class="debrief-body">
         <div class="lesson-card">
           <div class="lesson-card-head">
@@ -775,7 +379,7 @@ Bank login · HTML
             Attackers routinely scan Instagram, Facebook, LinkedIn and TikTok profiles before attempting any account takeover. In this activity, Emma's birthday, her pet's name and her hometown were all sitting in plain sight on her public profile — enough to reset her bank password without ever knowing it.
           </div>
         </div>
- 
+
         <div class="lesson-card">
           <div class="lesson-card-head">
             <div class="lesson-card-icon icon-flaw">⚠️</div>
@@ -787,7 +391,7 @@ Bank login · HTML
             Unlike a real password, a security question answer never changes. Once an attacker finds it on social media, it works <em>forever</em>. This is why many security researchers call security questions one of the weakest links in modern authentication.
           </div>
         </div>
- 
+
         <div class="lesson-card">
           <div class="lesson-card-head">
             <div class="lesson-card-icon icon-defense">🛡️</div>
@@ -805,9 +409,9 @@ Bank login · HTML
       </div>
     </div>
   </div>
- 
+
 </main>
- 
+
 <footer>
   <span data-i18n="footer.copy">© 2026 SecureBank Berhad (123456-X) · Licensed by Bank Negara Malaysia</span>
   <nav>
@@ -817,7 +421,7 @@ Bank login · HTML
     <a href="#" data-i18n="footer.access">Accessibility</a>
   </nav>
 </footer>
- 
+
 <script>
 /* ══════════════════════════════════════════════
    TRANSLATIONS
@@ -827,7 +431,7 @@ const T = {
     'nav.personal': 'Personal', 'nav.business': 'Business',
     'nav.investments': 'Investments', 'nav.help': 'Help',
     'security.strip': 'Your connection is <b>secure and encrypted</b> · 256-bit SSL · SecureBank will never ask for your full password',
- 
+
     'login.side.title': 'Welcome to Online Banking',
     'login.side.sub': 'Manage your accounts, payments and more — securely, anytime.',
     'login.feat1.title': 'Account Overview', 'login.feat1.desc': 'View balances and recent transactions in real time.',
@@ -839,11 +443,11 @@ const T = {
     'login.label.user': 'Username / Email', 'login.label.pass': 'Password',
     'login.remember': 'Remember my username', 'login.forgot': 'Forgot password?',
     'login.btn': 'Sign In',
- 
+
     'gate.title': '🔒 Verify Account Identity',
     'gate.sub': 'To proceed with a password reset, please confirm the username or email address linked to this account.',
     'gate.btn': 'Continue to Security Questions →',
- 
+
     'reset.header.title': 'Reset Your Password',
     'reset.header.sub': 'Answer your security questions, then set a new password.',
     'reset.back': '← Back to Sign In',
@@ -851,7 +455,7 @@ const T = {
     'sq2.label': 'Security Question 2', 'sq2.q': 'What is your date of birth? (DD/MM/YYYY)',
     'sq3.label': 'Security Question 3', 'sq3.q': 'What city did you grow up in?',
     'reset.verify.btn': 'Verify Identity',
- 
+
     'newpass.title': '✅ Identity Verified — Set a New Password',
     'newpass.sub': 'Choose a strong password. The "Confirm Reset" button unlocks once your password would take at least <strong>days</strong> to crack.',
     'newpass.label': 'New Password', 'newpass.confirm.label': 'Confirm New Password',
@@ -860,10 +464,10 @@ const T = {
     'chip.upper': 'Upper case', 'chip.lower': 'Lower case',
     'chip.numbers': 'Numbers', 'chip.symbols': 'Symbols', 'chip.length': '12+ chars',
     'strength.crack.label': 'Time to crack your password',
- 
+
     'debrief.ans.title': 'Clues found on Instagram',
     'debrief.ans.pet': 'First pet\'s name', 'debrief.ans.dob': 'Date of birth', 'debrief.ans.city': 'City grew up in',
- 
+
     'lesson1.title': 'What is OSINT?', 'lesson1.tag': 'Open-Source Intelligence',
     'lesson1.body': '<strong>OSINT</strong> is the practice of collecting information about a target using only <strong>publicly available sources</strong> — social media posts, photos, bios, comments, and check-ins. You don\'t need to hack anything. You just need to look.<br><br>Attackers routinely scan Instagram, Facebook, LinkedIn and TikTok profiles before attempting any account takeover. In this activity, Emma\'s birthday, her pet\'s name and her hometown were all sitting in plain sight on her public profile — enough to reset her bank password without ever knowing it.',
     'lesson2.title': 'The Flaw in Security Questions', 'lesson2.tag': 'Why they\'re dangerous',
@@ -872,12 +476,12 @@ const T = {
     'lesson3.body': 'The most effective defence is simple: <strong>lie on security questions</strong>.<br><br>When a website asks "What is your mother\'s maiden name?", don\'t answer truthfully. Treat it like a second password — type something completely random — and store it in a <strong>password manager</strong> so you don\'t forget it.',
     'lesson3.tip.title': '✅ Three habits to start today',
     'lesson3.tip.body': '1. Use random, unguessable answers for security questions and save them in a password manager.<br>2. Keep your social media profiles private, and think twice before posting birthdays, pet names, or hometowns.<br>3. Wherever possible, use a passkey or authenticator app instead of security questions entirely.',
- 
+
     'footer.copy': '© 2026 SecureBank Berhad (123456-X) · Licensed by Bank Negara Malaysia',
     'footer.privacy': 'Privacy Policy', 'footer.terms': 'Terms & Conditions',
     'footer.security': 'Security Tips', 'footer.contact': 'Contact Us',
     'footer.security.lnk': 'Security', 'footer.fraud': 'Fraud Alerts', 'footer.access': 'Accessibility',
- 
+
     // Dynamic messages
     'msg.no.user': 'Please enter your username or email.',
     'msg.no.pass': 'Please enter your password.',
@@ -890,7 +494,7 @@ const T = {
     'crack.instantly': 'Instantly', 'crack.seconds': 'seconds', 'crack.minutes': 'minutes',
     'crack.hours': 'hours', 'crack.days': 'days', 'crack.months': 'months',
     'crack.years': 'years', 'crack.kyears': 'k years', 'crack.centuries': 'Centuries',
- 
+
     // Debrief dynamic text
     'debrief.hacker.badge': '★ Master Hacker — Password Guessed!',
     'debrief.hacker.title': 'You cracked the password directly!',
@@ -902,12 +506,12 @@ const T = {
     'debrief.osint.desc': 'You reset Emma\'s password using answers found on her public Instagram profile. No hacking tools, no technical skills — just reading her posts.',
     'debrief.osint.ans.title': 'Clues found on Instagram',
   },
- 
+
   bm: {
     'nav.personal': 'Peribadi', 'nav.business': 'Perniagaan',
     'nav.investments': 'Pelaburan', 'nav.help': 'Bantuan',
     'security.strip': 'Sambungan anda adalah <b>selamat dan disulitkan</b> · SSL 256-bit · SecureBank tidak akan meminta kata laluan penuh anda',
- 
+
     'login.side.title': 'Selamat Datang ke Perbankan Dalam Talian',
     'login.side.sub': 'Urus akaun, pembayaran dan lebih lagi — dengan selamat, bila-bila masa.',
     'login.feat1.title': 'Gambaran Keseluruhan Akaun', 'login.feat1.desc': 'Semak baki dan transaksi terkini secara masa nyata.',
@@ -919,11 +523,11 @@ const T = {
     'login.label.user': 'Nama Pengguna / E-mel', 'login.label.pass': 'Kata Laluan',
     'login.remember': 'Ingat nama pengguna saya', 'login.forgot': 'Lupa kata laluan?',
     'login.btn': 'Log Masuk',
- 
+
     'gate.title': '🔒 Sahkan Identiti Akaun',
     'gate.sub': 'Untuk meneruskan penetapan semula kata laluan, sila sahkan nama pengguna atau alamat e-mel yang dikaitkan dengan akaun ini.',
     'gate.btn': 'Teruskan ke Soalan Keselamatan →',
- 
+
     'reset.header.title': 'Tetapkan Semula Kata Laluan',
     'reset.header.sub': 'Jawab soalan keselamatan anda, kemudian tetapkan kata laluan baharu.',
     'reset.back': '← Kembali ke Log Masuk',
@@ -931,7 +535,7 @@ const T = {
     'sq2.label': 'Soalan Keselamatan 2', 'sq2.q': 'Apakah tarikh lahir anda? (HH/BB/TTTT)',
     'sq3.label': 'Soalan Keselamatan 3', 'sq3.q': 'Bandar apakah tempat anda membesar?',
     'reset.verify.btn': 'Sahkan Identiti',
- 
+
     'newpass.title': '✅ Identiti Disahkan — Tetapkan Kata Laluan Baharu',
     'newpass.sub': 'Pilih kata laluan yang kuat. Butang "Sahkan Tetapan Semula" akan diaktifkan apabila kata laluan anda memerlukan sekurang-kurangnya <strong>beberapa hari</strong> untuk dipecahkan.',
     'newpass.label': 'Kata Laluan Baharu', 'newpass.confirm.label': 'Sahkan Kata Laluan Baharu',
@@ -940,10 +544,10 @@ const T = {
     'chip.upper': 'Huruf besar', 'chip.lower': 'Huruf kecil',
     'chip.numbers': 'Nombor', 'chip.symbols': 'Simbol', 'chip.length': '12+ aksara',
     'strength.crack.label': 'Masa untuk memecahkan kata laluan anda',
- 
+
     'debrief.ans.title': 'Petunjuk ditemui di Instagram',
     'debrief.ans.pet': 'Nama haiwan peliharaan pertama', 'debrief.ans.dob': 'Tarikh lahir', 'debrief.ans.city': 'Bandar tempat membesar',
- 
+
     'lesson1.title': 'Apakah OSINT?', 'lesson1.tag': 'Perisikan Sumber Terbuka',
     'lesson1.body': '<strong>OSINT</strong> ialah amalan mengumpul maklumat tentang sasaran menggunakan hanya <strong>sumber yang tersedia secara awam</strong> — catatan media sosial, foto, bio, komen, dan daftar masuk. Anda tidak perlu menggodam apa-apa. Anda hanya perlu melihat.<br><br>Penyerang sering mengimbas profil Instagram, Facebook, LinkedIn dan TikTok sebelum mencuba pengambilalihan akaun. Dalam aktiviti ini, tarikh lahir Emma, nama haiwan peliharaannya dan kampung halamannya semuanya kelihatan jelas di profilnya yang awam — cukup untuk menetapkan semula kata laluan bank tanpa mengetahuinya.',
     'lesson2.title': 'Kelemahan Soalan Keselamatan', 'lesson2.tag': 'Mengapa ia berbahaya',
@@ -952,12 +556,12 @@ const T = {
     'lesson3.body': 'Pertahanan paling berkesan adalah mudah: <strong>berbohong pada soalan keselamatan</strong>.<br><br>Apabila laman web bertanya "Apakah nama gadis ibu anda?", jangan jawab dengan benar. Anggap ia sebagai kata laluan kedua — taip sesuatu yang rawak sepenuhnya — dan simpan dalam <strong>pengurus kata laluan</strong> supaya anda tidak terlupa.',
     'lesson3.tip.title': '✅ Tiga tabiat untuk dimulakan hari ini',
     'lesson3.tip.body': '1. Gunakan jawapan rawak yang tidak dapat diteka untuk soalan keselamatan dan simpannya dalam pengurus kata laluan.<br>2. Jadikan profil media sosial anda peribadi, dan fikirkan dua kali sebelum menyiarkan tarikh lahir, nama haiwan peliharaan, atau kampung halaman.<br>3. Jika boleh, gunakan kunci laluan atau aplikasi pengesah dan bukannya soalan keselamatan.',
- 
+
     'footer.copy': '© 2026 SecureBank Berhad (123456-X) · Dilesenkan oleh Bank Negara Malaysia',
     'footer.privacy': 'Dasar Privasi', 'footer.terms': 'Terma & Syarat',
     'footer.security': 'Tips Keselamatan', 'footer.contact': 'Hubungi Kami',
     'footer.security.lnk': 'Keselamatan', 'footer.fraud': 'Amaran Penipuan', 'footer.access': 'Kebolehcapaian',
- 
+
     'msg.no.user': 'Sila masukkan nama pengguna atau e-mel anda.',
     'msg.no.pass': 'Sila masukkan kata laluan anda.',
     'msg.wrong.pass': 'Nama pengguna atau kata laluan salah. Sila cuba lagi.',
@@ -969,7 +573,7 @@ const T = {
     'crack.instantly': 'Serta-merta', 'crack.seconds': 'saat', 'crack.minutes': 'minit',
     'crack.hours': 'jam', 'crack.days': 'hari', 'crack.months': 'bulan',
     'crack.years': 'tahun', 'crack.kyears': 'ribu tahun', 'crack.centuries': 'Berabad-abad',
- 
+
     'debrief.hacker.badge': '★ Penggodam Pakar — Kata Laluan Diteka!',
     'debrief.hacker.title': 'Anda memecahkan kata laluan secara langsung!',
     'debrief.hacker.desc': 'Anda meneka kata laluan tepat Emma — mungkin kerana dia menggunakan butiran peribadi dari media sosialnya sebagai kata laluan. Inilah cara akaun sebenar dikompromi.',
@@ -981,32 +585,32 @@ const T = {
     'debrief.osint.ans.title': 'Petunjuk ditemui di Instagram',
   }
 };
- 
+
 let lang = 'en';
- 
+
 function setLang(l) {
   lang = l;
   document.getElementById('btn-en').classList.toggle('active', l === 'en');
   document.getElementById('btn-bm').classList.toggle('active', l === 'bm');
   document.documentElement.lang = l === 'bm' ? 'ms' : 'en';
- 
+
   // Update all static data-i18n elements
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (T[l][key] !== undefined) el.innerHTML = T[l][key];
   });
- 
+
   // Re-run strength display so crack label updates
   checkStrength();
 }
- 
+
 function t(key) { return T[lang][key] || T['en'][key] || key; }
- 
+
 /* ── HELPERS ── */
 const VALID_USERS  = ['emma.j.2006', 'emma.johansson06@gmail.com'];
 const EXACT_PASSES = ['Finally18!!', 'Biscuit2006!'];
 let loginAttempts = 0;
- 
+
 function goTo(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -1022,33 +626,33 @@ function clearMsg(id) {
   el.textContent = '';
   el.className = 'msg-box';
 }
- 
+
 /* ── PAGE 1 ── */
 function showForgotGate() {
   document.getElementById('forgot-gate').classList.add('show');
   document.getElementById('gate-user').focus();
 }
- 
+
 function tryLogin() {
   const user = document.getElementById('inp-user').value.trim();
   const pass = document.getElementById('inp-pass').value;
   const uEl = document.getElementById('inp-user');
   const pEl = document.getElementById('inp-pass');
   uEl.classList.remove('err'); pEl.classList.remove('err');
- 
+
   if (!user) { uEl.classList.add('err'); showMsg('login-msg', t('msg.no.user'), 'err'); return; }
   if (!pass) { pEl.classList.add('err'); showMsg('login-msg', t('msg.no.pass'), 'err'); return; }
- 
+
   const userOk = VALID_USERS.includes(user.toLowerCase());
   const passOk = EXACT_PASSES.includes(pass);
- 
+
   if (userOk && passOk) { showDebrief('hacker'); return; }
- 
+
   pEl.classList.add('err');
   loginAttempts++;
   showMsg('login-msg', loginAttempts >= 2 ? t('msg.locked') : t('msg.wrong.pass'), loginAttempts >= 2 ? 'warn' : 'err');
 }
- 
+
 function tryGate() {
   const val = document.getElementById('gate-user').value.trim().toLowerCase();
   const el  = document.getElementById('gate-user');
@@ -1056,7 +660,7 @@ function tryGate() {
   if (VALID_USERS.includes(val)) { clearMsg('gate-msg'); goTo('page-reset'); }
   else { el.classList.add('err'); showMsg('gate-msg', t('msg.gate.fail'), 'err'); }
 }
- 
+
 /* ── PAGE 2 ── */
 function trySecurityQs() {
   const s1 = document.getElementById('sq1').value.trim().toLowerCase();
@@ -1066,15 +670,15 @@ function trySecurityQs() {
   const i2 = document.getElementById('sq2');
   const i3 = document.getElementById('sq3');
   [i1,i2,i3].forEach(i => i.classList.remove('err','ok'));
- 
+
   const a1 = s1 === 'biscuit';
   const a2 = ['14/03/2006','14-03-2006','14032006','14/3/2006'].includes(s2);
   const a3 = s3.includes('sunshine');
- 
+
   i1.classList.add(a1 ? 'ok' : 'err');
   i2.classList.add(a2 ? 'ok' : 'err');
   i3.classList.add(a3 ? 'ok' : 'err');
- 
+
   if (a1 && a2 && a3) {
     clearMsg('sq-msg');
     document.getElementById('new-pass-section').classList.add('show');
@@ -1087,21 +691,21 @@ function trySecurityQs() {
     showMsg('sq-msg', t('msg.sq.fail.prefix') + wrong.join(', ') + t('msg.sq.fail.suffix'), 'err');
   }
 }
- 
+
 /* ── STRENGTH METER ── */
 function checkStrength() {
   const val = document.getElementById('new-pass').value;
   const btn = document.getElementById('btn-confirm-reset');
   if (!btn) return;
- 
+
   document.getElementById('char-count').textContent = val.length;
- 
+
   const hasUpper = /[A-Z]/.test(val);
   const hasLower = /[a-z]/.test(val);
   const hasNum   = /[0-9]/.test(val);
   const hasSym   = /[^A-Za-z0-9]/.test(val);
   const hasLen   = val.length >= 12;
- 
+
   ['chip-up','chip-low','chip-num','chip-sym','chip-len'].forEach(id =>
     document.getElementById(id) && document.getElementById(id).classList.remove('active')
   );
@@ -1110,22 +714,22 @@ function checkStrength() {
   if (hasNum)   document.getElementById('chip-num').classList.add('active');
   if (hasSym)   document.getElementById('chip-sym').classList.add('active');
   if (hasLen)   document.getElementById('chip-len').classList.add('active');
- 
+
   const crackEl = document.getElementById('crack-time');
   const len = val.length;
   let crackText = '—', crackCls = 'instantly', score = 0;
- 
+
   if (len > 0) {
     let charset = 0;
     if (hasLower) charset += 26; if (hasUpper) charset += 26;
     if (hasNum)   charset += 10; if (hasSym)   charset += 32;
     if (charset === 0) charset = 26;
- 
+
     const logSec = len * Math.log10(charset) - Math.log10(1e10);
     const seconds = Math.pow(10, logSec);
     const minutes = seconds / 60, hours = minutes / 60;
     const days = hours / 24, years = days / 365;
- 
+
     if (seconds < 1)       { crackText = t('crack.instantly');                         crackCls = 'instantly'; }
     else if (seconds < 60) { crackText = Math.round(seconds) + ' ' + t('crack.seconds'); crackCls = 'instantly'; }
     else if (minutes < 60) { crackText = Math.round(minutes) + ' ' + t('crack.minutes'); crackCls = 'weak'; }
@@ -1135,16 +739,16 @@ function checkStrength() {
     else if (years < 1000) { crackText = Math.round(years)   + ' ' + t('crack.years');   crackCls = 'strong'; }
     else if (years < 1e6)  { crackText = Math.round(years/1000) + ' ' + t('crack.kyears'); crackCls = 'strong'; }
     else                   { crackText = t('crack.centuries');                           crackCls = 'strong'; }
- 
+
     if (days >= 1) score = 1;
     if (years >= 1) score = 2;
   }
- 
+
   crackEl.textContent = crackText;
   crackEl.className = 'strength-crack-time ' + crackCls;
   btn.disabled = !(score >= 1 && val.length > 0);
 }
- 
+
 function confirmReset() {
   const np = document.getElementById('new-pass').value;
   const cp = document.getElementById('confirm-pass').value;
@@ -1155,7 +759,7 @@ function confirmReset() {
   }
   showDebrief('osint');
 }
- 
+
 /* ── DEBRIEF ── */
 function showDebrief(route) {
   const top   = document.getElementById('debrief-top');
@@ -1166,9 +770,9 @@ function showDebrief(route) {
   const ansTitle = document.getElementById('debrief-answers-title');
   const rowDob  = document.getElementById('ans-row-dob');
   const rowCity = document.getElementById('ans-row-city');
- 
+
   top.className = 'debrief-top route-' + route;
- 
+
   if (route === 'hacker') {
     icon.textContent = '🏆';
     badge.textContent = t('debrief.hacker.badge');
@@ -1190,10 +794,9 @@ function showDebrief(route) {
     rowDob.style.display  = '';
     rowCity.style.display = '';
   }
- 
+
   goTo('page-debrief');
 }
 </script>
 </body>
 </html>
- 
