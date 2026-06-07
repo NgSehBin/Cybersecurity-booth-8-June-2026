@@ -1,10 +1,9 @@
 {
-  "cleanUrls": true,
   "redirects": [
     {
       "source": "/",
-      "destination": "/fakeBank",
-      "permanent": true
+      "destination": "/fakeBank.html",
+      "permanent": false
     }
   ]
 }
