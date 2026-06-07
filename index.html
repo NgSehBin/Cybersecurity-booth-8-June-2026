@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>emma.j.2006 — Instagram</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ig-bg: #fafafa;
+    --ig-white: #ffffff;
+    --ig-border: #dbdbdb;
+    --ig-text: #262626;
+    --ig-muted: #8e8e8e;
+    --ig-blue: #0095f6;
+    --ig-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    --font: 'DM Sans', sans-serif;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--ig-bg);
+    min-height: 100vh;
+    color: var(--ig-text);
+  }
+
+  /* ─── NAV ─── */
+  .ig-nav {
+    background: var(--ig-white);
+    border-bottom: 1px solid var(--ig-border);
+    padding: 0 20px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .ig-logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    color: var(--ig-text);
+    letter-spacing: -0.5px;
+    user-select: none;
+  }
+  .ig-nav-icons {
+    display: flex;
+    gap: 16px;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--ig-text);
+  }
+
+  /* ─── PROFILE HEADER ─── */
+  .ig-profile {
+    background: var(--ig-white);
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--ig-border);
+    max-width: 935px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .ig-profile-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    margin-bottom: 20px;
+  }
+
+  /* ── PROFILE PICTURE ──
+     Replace the letter "E" fallback with an <img> tag.
+     Recommended size: 150×150 px, circular crop handled by CSS.
+     Place your image at: assets/profile/avatar.jpg
+  */
+  .ig-avatar-ring {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    padding: 3px;
+    background: var(--ig-gradient);
+    flex-shrink: 0;
+  }
+  .ig-avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--ig-white);
+    background: #fde8d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: 600;
+    color: #8b4513;
+    overflow: hidden;
+  }
+  .ig-avatar-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .ig-profile-info { flex: 1; min-width: 0; }
+  .ig-username-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .ig-username { font-size: 20px; font-weight: 400; }
+  .ig-btn {
+    border: 1px solid var(--ig-border);
+    background: var(--ig-white);
+    border-radius: 8px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font);
+    color: var(--ig-text);
+  }
+  .ig-btn.primary {
+    background: var(--ig-blue);
+    border-color: var(--ig-blue);
+    color: #fff;
+  }
+  .ig-stats {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 14px;
+  }
+  .ig-stat strong { display: block; font-size: 16px; font-weight: 600; }
+  .ig-stat span { font-size: 14px; color: var(--ig-text); }
+  .ig-bio-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .ig-bio-text { font-size: 14px; line-height: 1.55; }
+  .ig-bio-text .clue { }
+
+  /* ─── HIGHLIGHTS ─── */
+  .ig-highlights-wrap {
+    background: var(--ig-white);
+    border-bottom: 1px solid var(--ig-border);
+  }
+  .ig-highlights {
+    max-width: 935px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    gap: 22px;
+    overflow-x: auto;
+  }
+  .ig-highlights::-webkit-scrollbar { display: none; }
+  .ig-highlight { text-align: center; flex-shrink: 0; cursor: pointer; }
+  .ig-highlight-ring {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--ig-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 5px;
+    background: #f9f9f9;
+    overflow: hidden;
+  }
+  /* ── HIGHLIGHT COVER IMAGES (optional) ──
+     Recommended size: 60×60 px
+     To use a real photo instead of the emoji, replace the emoji span
+     inside each .ig-highlight-ring with: <img src="assets/highlights/NAME.jpg" …>
+  */
+  .ig-highlight span { font-size: 12px; color: var(--ig-text); }
+
+  /* ─── TABS ─── */
+  .ig-tabs-wrap {
+    background: var(--ig-white);
+    border-bottom: 1px solid var(--ig-border);
+  }
+  .ig-tabs {
+    max-width: 935px;
+    margin: 0 auto;
+    display: flex;
+  }
+  .ig-tab {
+    flex: 1;
+    text-align: center;
+    padding: 13px 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ig-muted);
+    border-top: 1px solid transparent;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .ig-tab.active {
+    color: var(--ig-text);
+    border-top-color: var(--ig-text);
+  }
+
+  /* ─── GRID ─── */
+  .ig-grid-wrap {
+    max-width: 935px;
+    margin: 0 auto;
+  }
+  .ig-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    background: var(--ig-border);
+  }
+
+  /*
+  ══════════════════════════════════════════════════════
+  POST THUMBNAIL IMAGES
+  ══════════════════════════════════════════════════════
+  Each post cell is a 1:1 square (aspect-ratio: 1).
+  The .post-img inside fills it completely via object-fit: cover.
+
+  Recommended image size: 300×300 px minimum (square)
+  Format: JPG or PNG
+  File paths: assets/posts/<filename>.jpg
+
+  To add your image:
+    1. Place your photo in assets/posts/
+    2. Find the post's <img class="post-img"> tag below
+    3. Set the src attribute: src="assets/posts/birthday.jpg"
+    4. Remove or keep the fallback emoji <span> as a backup
+
+  CLUE POSTS: ids 1, 2, 8 — the personal info lives naturally inside
+  the captions and comments as plain text, just like a real profile.
+  ══════════════════════════════════════════════════════
+  */
+
+  .ig-post {
+    aspect-ratio: 1;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background: #e9e9e9;
+  }
+  .post-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+  /* Fallback emoji shown only when no image is loaded */
+  .post-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    z-index: 1;
+  }
+  /* When a real img loads, it sits above the fallback */
+  .post-img:not([src=""]):not([src]) { z-index: 2; }
+
+
+
+  /* Hover overlay */
+  .post-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s;
+    z-index: 6;
+  }
+  .ig-post:hover .post-overlay {
+    opacity: 1;
+    background: rgba(0,0,0,0.42);
+  }
+  .post-overlay span { display: flex; align-items: center; gap: 5px; }
+
+  /* ─── MODAL ─── */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal-close {
+    position: fixed;
+    top: 18px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 201;
+    line-height: 1;
+  }
+
+  .modal {
+    background: var(--ig-white);
+    border-radius: 4px;
+    display: flex;
+    max-width: 900px;
+    width: 94vw;
+    max-height: 90vh;
+    overflow: hidden;
+  }
+
+  /*
+  ══════════════════════════════════════════════════════
+  MODAL LARGE IMAGE
+  ══════════════════════════════════════════════════════
+  The left half of the modal shows the full post image.
+  Recommended size: 600×600 px (square or portrait)
+  Same file as the thumbnail — no separate image needed.
+  ══════════════════════════════════════════════════════
+  */
+  .modal-img-wrap {
+    width: 52%;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: 420px;
+    position: relative;
+    overflow: hidden;
+  }
+  .modal-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+  .modal-img-fallback {
+    font-size: 72px;
+    z-index: 1;
+  }
+
+  .modal-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .modal-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--ig-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .modal-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--ig-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .modal-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .modal-header-name { font-size: 13px; font-weight: 600; }
+  .modal-header-loc { font-size: 12px; color: var(--ig-muted); }
+  .modal-more { margin-left: auto; font-size: 20px; cursor: pointer; color: var(--ig-text); }
+
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px;
+  }
+  .modal-caption {
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 16px;
+    color: var(--ig-text);
+  }
+  .modal-caption strong { font-weight: 600; margin-right: 5px; }
+  .modal-caption .clue-tag {
+    /* clue words styled as plain text — no highlight */
+  }
+  .modal-comment {
+    font-size: 13.5px;
+    margin-bottom: 10px;
+    line-height: 1.45;
+    color: var(--ig-text);
+  }
+  .modal-comment strong { font-weight: 600; margin-right: 4px; }
+  .modal-comment span { color: var(--ig-muted); font-size: 11px; margin-left: 8px; }
+
+  .modal-footer {
+    border-top: 1px solid var(--ig-border);
+    padding: 10px 16px;
+    flex-shrink: 0;
+  }
+  .modal-actions { display: flex; gap: 14px; font-size: 23px; margin-bottom: 8px; cursor: pointer; }
+  .modal-likes { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .modal-date { font-size: 11px; color: var(--ig-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+
+</style>
+</head>
+<body>
+
+<!-- ─── NAVIGATION ─── -->
+<nav class="ig-nav">
+  <div class="ig-logo">Instagram</div>
+  <div class="ig-nav-icons">
+    <span title="Home">🏠</span>
+    <span title="Search">🔍</span>
+    <span title="Reels">🎬</span>
+    <span title="Notifications">❤️</span>
+    <span title="Profile">👤</span>
+  </div>
+</nav>
+
+<!-- ─── PROFILE HEADER ─── -->
+<div class="ig-profile">
+  <div class="ig-profile-top">
+
+    <!-- AVATAR
+         ─────────────────────────────────────────────
+         Recommended: 150×150 px, square, JPG/PNG
+         Path: assets/profile/avatar.jpg
+         To use: uncomment the <img> and remove the letter span
+         ─────────────────────────────────────────────
+    -->
+    <div class="ig-avatar-ring">
+      <div class="ig-avatar-inner">
+        <!-- <img src="assets/profile/avatar.jpg" alt="Emma's profile picture"> -->
+        E   <!-- fallback letter — remove when image is added -->
+      </div>
+    </div>
+
+    <div class="ig-profile-info">
+      <div class="ig-username-row">
+        <span class="ig-username">emma.j.2006</span>
+        <button class="ig-btn primary">Follow</button>
+        <button class="ig-btn">Message</button>
+        <button class="ig-btn" style="padding:6px 10px;">⋯</button>
+      </div>
+      <div class="ig-stats">
+        <div class="ig-stat"><strong>12</strong><span>posts</span></div>
+        <div class="ig-stat"><strong>847</strong><span>followers</span></div>
+        <div class="ig-stat"><strong>312</strong><span>following</span></div>
+      </div>
+      <div class="ig-bio-name">Emma Johansson ✨</div>
+      <div class="ig-bio-text">
+        🎂 Born <span class="clue">14 March 2006</span> • Pisces 🐟<br>
+        🐶 Dog mum to <span class="clue">Biscuit</span> 🍪<br>
+        📍 Sunshine Valley High<br>
+        💌 emma.johansson06@gmail.com
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── HIGHLIGHTS ─── -->
+<div class="ig-highlights-wrap">
+  <div class="ig-highlights">
+    <!-- Each highlight can have a cover image instead of an emoji.
+         Recommended: 60×60 px. Replace the emoji with:
+         <img src="assets/highlights/summer.jpg" alt="Summer highlight cover">
+    -->
+    <div class="ig-highlight">
+      <div class="ig-highlight-ring">🏖️</div>
+      <span>Summer</span>
+    </div>
+    <div class="ig-highlight">
+      <div class="ig-highlight-ring">🐶</div>
+      <span>Biscuit</span>
+    </div>
+    <div class="ig-highlight">
+      <div class="ig-highlight-ring">🎂</div>
+      <span>Bday</span>
+    </div>
+    <div class="ig-highlight">
+      <div class="ig-highlight-ring">🏫</div>
+      <span>School</span>
+    </div>
+    <div class="ig-highlight">
+      <div class="ig-highlight-ring">🎮</div>
+      <span>Gaming</span>
+    </div>
+    <div class="ig-highlight">
+      <div class="ig-highlight-ring">🌸</div>
+      <span>Spring</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TABS ─── -->
+<div class="ig-tabs-wrap">
+  <div class="ig-tabs">
+    <div class="ig-tab active">⊞ Posts</div>
+    <div class="ig-tab">⊡ Reels</div>
+    <div class="ig-tab">🏷 Tagged</div>
+  </div>
+</div>
+
+<!-- ─── POST GRID ─── -->
+<div class="ig-grid-wrap">
+  <div class="ig-grid" id="grid"></div>
+</div>
+
+<!-- ─── POST MODAL ─── -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="handleBackdropClick(event)">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <div class="modal" id="modal">
+
+    <div class="modal-img-wrap" id="modal-img-wrap">
+      <!--
+        Large modal image rendered here dynamically.
+        Same image source as the thumbnail (see JS data below).
+        Size recommendation: at least 600×600 px.
+      -->
+      <div class="modal-img-fallback" id="modal-fallback"></div>
+    </div>
+
+    <div class="modal-right">
+      <div class="modal-header">
+        <div class="modal-avatar">
+          <!-- <img src="assets/profile/avatar.jpg" alt="avatar"> -->
+          E
+        </div>
+        <div>
+          <div class="modal-header-name">emma.j.2006</div>
+          <div class="modal-header-loc" id="modal-loc"></div>
+        </div>
+        <div class="modal-more">•••</div>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-caption" id="modal-caption"></div>
+        <div id="modal-comments"></div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="modal-actions">❤️ 💬 📤 🔖</div>
+        <div class="modal-likes" id="modal-likes"></div>
+        <div class="modal-date" id="modal-date"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/*
+════════════════════════════════════════════════════════════
+  POST DATA
+  ────────────────────────────────────────────────────────
+  For each post, set the `img` field to your image path.
+  Leave img as "" to show the fallback emoji instead.
+
+  IMAGE SIZES:
+    • thumbnail (grid): 300×300 px minimum (square)
+    • modal (large):    same file is reused — 600×600 px ideal
+    • format: JPG or PNG
+
+  CLUE POSTS: ids 1, 2, 8 — marked with clue: true
+    These reveal: birthday, pet name, and home city.
+════════════════════════════════════════════════════════════
+*/
+const posts = [
+  {
+    id: 1,
+    clue: true,
+    emoji: "🎂",
+    // ── POST 1 IMAGE ──────────────────────────────────────
+    // Suggested: a birthday celebration photo
+    // Size: 300×300 px (square). Larger is fine — it will be cropped.
+    img: "images/birthday1.png",  // e.g. "assets/posts/birthday.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "312 likes",
+    date: "MARCH 14",
+    location: "Birthday Dinner 🍽️",
+    caption: `<strong>emma.j.2006</strong> It's my birthday!! 🥳🎂 Finally turning 18 today — <span class="clue-tag">14th March!!</span> Can't believe how fast the years go. Thank you everyone for all the sweet wishes 💕 #Birthday #March14 #Pisces #Finally18`,
+    comments: [
+      { user: "sophie_s",  text: "Happy birthday babe!! 🎉🎂",           time: "2h" },
+      { user: "danieltok", text: "Hope you have an amazing day!! 🎈",    time: "1h" },
+      { user: "mia_23",    text: "Miss you!! Birthday calls later? 😘",  time: "45m" },
+    ]
+  },
+  {
+    id: 2,
+    clue: true,
+    emoji: "🐶",
+    // ── POST 2 IMAGE ──────────────────────────────────────
+    // Suggested: a photo of the pet dog
+    // Size: 300×300 px (square)
+    img: "images/dog2.png",  // e.g. "assets/posts/biscuit.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "284 likes",
+    date: "FEBRUARY 8",
+    location: "Home Sweet Home 🏡",
+    caption: `<strong>emma.j.2006</strong> My forever best friend 🐾💛 Three years with <span class="clue-tag">Biscuit</span> today!! She was the <span class="clue-tag">first pet</span> I ever got — I was 8 years old and cried the whole way home from the shelter 😭 Love you forever Biscuit 🍪🐕 #DogsOfInstagram #Biscuit #PuppyLove`,
+    comments: [
+      { user: "petlover99",  text: "Omg she is SO cute 😍🐶",          time: "5h" },
+      { user: "emmafan_xx",  text: "Biscuit is iconic honestly 🍪",     time: "3h" },
+      { user: "luke.j",      text: "Best dog ever!! Hug from me 🐾",    time: "1h" },
+    ]
+  },
+  {
+    id: 3,
+    clue: false,
+    emoji: "🌸",
+    // ── POST 3 IMAGE ──────────────────────────────────────
+    // Suggested: park / spring flowers photo
+    // Size: 300×300 px (square)
+    img: "images/tree3.png",  // e.g. "assets/posts/spring-park.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "198 likes",
+    date: "JANUARY 22",
+    location: "Sunshine Valley Park 🌳",
+    caption: `<strong>emma.j.2006</strong> Spring vibes are here early 🌸🌼 Sat in the park all afternoon with no homework and zero worries. This is the life ✨ #Spring #Aesthetic #Peaceful`,
+    comments: [
+      { user: "nat_m",       text: "So pretty!! Which park is this?",        time: "6h" },
+      { user: "emma.j.2006", text: "The one near Sunshine Valley High! 💚",  time: "5h" },
+    ]
+  },
+  {
+    id: 4,
+    clue: false,
+    emoji: "🏖️",
+    // ── POST 4 IMAGE ──────────────────────────────────────
+    // Suggested: beach / travel photo
+    // Size: 300×300 px (square)
+    img: "images/seaside4.png",  // e.g. "assets/posts/bali-trip.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "421 likes",
+    date: "DECEMBER 28",
+    location: "Bali, Indonesia 🌴",
+    caption: `<strong>emma.j.2006</strong> Year end trip 🌊☀️ Never want to leave Bali honestly. The sunsets here are unreal. So grateful for this year 🙏 #Bali #Travel #Sunset #Blessed`,
+    comments: [
+      { user: "jessie_b", text: "So jealous!!! 😭🌴",          time: "8h" },
+      { user: "tom_x",    text: "Best place on earth fr 🏝️",  time: "6h" },
+    ]
+  },
+  {
+    id: 5,
+    clue: false,
+    emoji: "🎮",
+    // ── POST 5 IMAGE ──────────────────────────────────────
+    // Suggested: gaming setup or screen photo
+    // Size: 300×300 px (square)
+    img: "images/laptop5.png",  // e.g. "assets/posts/gaming.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "156 likes",
+    date: "NOVEMBER 15",
+    location: "",
+    caption: `<strong>emma.j.2006</strong> Gaming night with the squad 🎮🕹️ We pulled an all-nighter playing Minecraft and I regret absolutely nothing lmao 😂 #Gaming #Minecraft #NightOwl`,
+    comments: [
+      { user: "zara_gamer", text: "The all-nighter was WORTH IT 😂", time: "10h" },
+      { user: "cody_v",     text: "Next time invite me!!",           time: "8h" },
+    ]
+  },
+  {
+    id: 6,
+    clue: false,
+    emoji: "🍜",
+    // ── POST 6 IMAGE ──────────────────────────────────────
+    // Suggested: bowl of ramen / food photo
+    // Size: 300×300 px (square)
+    img: "images/ramen6.png",  // e.g. "assets/posts/ramen.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "203 likes",
+    date: "NOVEMBER 3",
+    location: "High Street Ramen 🍜",
+    caption: `<strong>emma.j.2006</strong> Ramen at midnight hits different 🍜🌙 This place on Sunshine Valley High Street is 100% underrated. Best tonkotsu broth I have ever had. #Foodie #Ramen #LateNightEats`,
+    comments: [
+      { user: "foodie_aisha", text: "WHERE IS THIS I need it 😭",              time: "1d" },
+      { user: "emma.j.2006",  text: "Sunshine Valley High Street!! Go!! 🍜",  time: "1d" },
+    ]
+  },
+  {
+    id: 7,
+    clue: false,
+    emoji: "📚",
+    // ── POST 7 IMAGE ──────────────────────────────────────
+    // Suggested: study desk / library photo
+    // Size: 300×300 px (square)
+    img: "images/fighting7.png",  // e.g. "assets/posts/exam-season.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "89 likes",
+    date: "OCTOBER 20",
+    location: "Central Library 📖",
+    caption: `<strong>emma.j.2006</strong> Exam szn is here 📚😩 Three tests in one week, send help. At least the library has good snacks 😅 #StudyMode #Finals #StudentLife`,
+    comments: [
+      { user: "studybuddy_l", text: "Same girl same 💀📚",  time: "2d" },
+      { user: "priya_k",      text: "You got this!! 💪",   time: "2d" },
+    ]
+  },
+  {
+    id: 8,
+    clue: true,
+    emoji: "🏡",
+    // ── POST 8 IMAGE ──────────────────────────────────────
+    // Suggested: town / neighbourhood / homecoming photo
+    // Size: 300×300 px (square)
+    img: "images/street8.png",  // e.g. "assets/posts/home-city.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "177 likes",
+    date: "SEPTEMBER 30",
+    location: "Sunshine Valley 🌻",
+    caption: `<strong>emma.j.2006</strong> Moved back to <span class="clue-tag">Sunshine Valley</span> after 3 years in the city!! I <span class="clue-tag">grew up here</span> and honestly nothing beats it 🌻🏡 Same streets, same people, same vibes. It feels so good to be home 💛 #HomeCity #SunshineValley #BackHome`,
+    comments: [
+      { user: "locals_only",  text: "Sunshine Valley gang!! 🌻",       time: "3d" },
+      { user: "old_friend_k", text: "FINALLY!! Welcome home girl 🏡",  time: "3d" },
+    ]
+  },
+  {
+    id: 9,
+    clue: false,
+    emoji: "🎵",
+    // ── POST 9 IMAGE ──────────────────────────────────────
+    // Suggested: concert / crowd / stage photo
+    // Size: 300×300 px (square)
+    img: "images/concert9.png",  // e.g. "assets/posts/concert.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "264 likes",
+    date: "AUGUST 14",
+    location: "City Arena 🎤",
+    caption: `<strong>emma.j.2006</strong> Concert nights are everything 🎵🎤 My third time seeing Taylor Swift live and I cry every single time. Los Angeles Tour was MAGICAL ✨ #TaylorSwift #ErasTour #Music`,
+    comments: [
+      { user: "swiftie_forever", text: "SISTERS IN SPIRIT 😭💕",     time: "1w" },
+      { user: "concert.addict",  text: "So jealous right now 😤",    time: "1w" },
+    ]
+  },
+  {
+    id: 10,
+    clue: false,
+    emoji: "☕",
+    // ── POST 10 IMAGE ─────────────────────────────────────
+    // Suggested: coffee cup / café photo
+    // Size: 300×300 px (square)
+    img: "images/book10.png",  // e.g. "assets/posts/coffee.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "143 likes",
+    date: "JULY 29",
+    location: "The Coffee Corner ☕",
+    caption: `<strong>emma.j.2006</strong> Sunday mornings with a good book and an oat latte ☕📖 No phone, no notifications, just vibes. This is my version of self-care 🌿 #SelfCare #CoffeeShop #Cozy`,
+    comments: [
+      { user: "bookworm_e",  text: "Which book? 👀",                            time: "2w" },
+      { user: "emma.j.2006", text: "The Midnight Library!! SO good 📖✨",       time: "2w" },
+    ]
+  },
+  {
+    id: 11,
+    clue: false,
+    emoji: "🌅",
+    // ── POST 11 IMAGE ─────────────────────────────────────
+    // Suggested: sunrise / beach run photo
+    // Size: 300×300 px (square)
+    img: "images/jog11.png",  // e.g. "assets/posts/sunrise-run.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "339 likes",
+    date: "JUNE 21",
+    location: "West Beach 🏃‍♀️",
+    caption: `<strong>emma.j.2006</strong> 5am sunrise run 🌅🏃‍♀️ I am NOT a morning person but this view makes it worth it every time. Starting summer on the right foot ☀️ #Sunrise #Summer #Fitness`,
+    comments: [
+      { user: "runner.ria", text: "5AM?? You are BRAVE 😂",      time: "3w" },
+      { user: "fitlife_j",  text: "Love this energy!! 💪",       time: "3w" },
+    ]
+  },
+  {
+    id: 12,
+    clue: false,
+    emoji: "🎨",
+    // ── POST 12 IMAGE ─────────────────────────────────────
+    // Suggested: painting / art supplies / canvas photo
+    // Size: 300×300 px (square)
+    img: "images/drawing12.png",  // e.g. "assets/posts/painting.jpg"
+    // ──────────────────────────────────────────────────────
+    likes: "117 likes",
+    date: "MAY 5",
+    location: "",
+    caption: `<strong>emma.j.2006</strong> Got into painting recently and I am obsessed 🎨🖌️ Started as a lockdown hobby and now I cannot stop. Anyone else weirdly meditative when they paint? 🌈 #Art #Painting #Creative`,
+    comments: [
+      { user: "artsy_maya",     text: "Your art is STUNNING 😍🎨",              time: "1mo" },
+      { user: "casual.artist",  text: "Same! Painting is so therapeutic ✨",   time: "1mo" },
+    ]
+  },
+];
+
+/* ─── BUILD GRID ─── */
+const grid = document.getElementById("grid");
+
+posts.forEach((post, idx) => {
+  const cell = document.createElement("div");
+  cell.className = "ig-post";
+  cell.setAttribute("aria-label", "Open post " + (idx + 1));
+  cell.setAttribute("role", "button");
+  cell.setAttribute("tabindex", "0");
+
+  // Empty cell — image will fill this when src is set
+  cell.innerHTML = `<div class="post-fallback"></div>`;
+
+  // Real image (sits above fallback when src is provided)
+  if (post.img) {
+    const img = document.createElement("img");
+    img.className = "post-img";
+    img.src = post.img;
+    img.alt = "Post " + (idx + 1);
+    cell.appendChild(img);
+  }
+
+  // Hover overlay
+  const overlay = document.createElement("div");
+  overlay.className = "post-overlay";
+  overlay.innerHTML = `<span>❤️ ${parseInt(post.likes)}</span><span>💬 ${post.comments.length}</span>`;
+  cell.appendChild(overlay);
+
+  cell.addEventListener("click", () => openPost(idx));
+  cell.addEventListener("keydown", e => { if (e.key === "Enter") openPost(idx); });
+
+  grid.appendChild(cell);
+});
+
+/* ─── MODAL LOGIC ─── */
+function openPost(idx) {
+  const p = posts[idx];
+  const backdrop = document.getElementById("modal-backdrop");
+  const imgWrap  = document.getElementById("modal-img-wrap");
+
+  // Clear previous image
+  const prevImg = imgWrap.querySelector("img");
+  if (prevImg) prevImg.remove();
+
+  // Set modal image
+  if (p.img) {
+    const img = document.createElement("img");
+    img.src = p.img;
+    img.alt = "Post image";
+    imgWrap.appendChild(img);
+    document.getElementById("modal-fallback").style.display = "none";
+  } else {
+    document.getElementById("modal-fallback").textContent = "";
+    document.getElementById("modal-fallback").style.display = "none";
+    imgWrap.style.background = "#e9e9e9";
+  }
+
+  document.getElementById("modal-loc").textContent      = p.location;
+  document.getElementById("modal-caption").innerHTML    = p.caption;
+  document.getElementById("modal-likes").textContent    = p.likes;
+  document.getElementById("modal-date").textContent     = p.date;
+
+  // Comments
+  const commentsEl = document.getElementById("modal-comments");
+  commentsEl.innerHTML = p.comments.map(c =>
+    `<div class="modal-comment"><strong>${c.user}</strong>${c.text}<span>${c.time}</span></div>`
+  ).join("");
+
+  backdrop.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  document.getElementById("modal-backdrop").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById("modal-backdrop")) closeModal();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeModal();
+});
+</script>
+</body>
+</html>
