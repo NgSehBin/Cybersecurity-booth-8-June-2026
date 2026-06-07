@@ -185,6 +185,73 @@
   footer nav { display: flex; gap: 20px; }
   footer nav a { font-size: 11px; color: rgba(255,255,255,0.45); text-decoration: none; }
   footer nav a:hover { color: rgba(255,255,255,0.85); }
+
+  /* ── PASSWORD CHALLENGE TRACKER (on hacker debrief) ── */
+  .pass-challenge { background: #f4f6f9; border: 1px solid var(--border); border-radius: 4px; padding: 18px 20px; margin: 0 32px 20px; }
+  .pass-challenge h3 { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #4a0080; margin-bottom: 4px; }
+  .pass-challenge-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .pass-slots { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .pass-slot {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 2px dashed var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; background: #fff;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .pass-slot.found {
+    border: 2px solid #16a34a;
+    background: #f0fdf4;
+  }
+  .pass-slot.found::after {
+    content: '✓';
+    position: absolute;
+    bottom: -2px; right: -2px;
+    width: 16px; height: 16px;
+    background: #16a34a;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 9px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 16px;
+    text-align: center;
+  }
+  .pass-count { font-size: 13px; color: var(--text); }
+  .pass-count strong { color: #4a0080; font-size: 15px; }
+  .pass-try-again {
+    display: inline-block; margin-top: 12px;
+    background: #4a0080; color: #fff;
+    border: none; border-radius: 3px;
+    padding: 10px 20px; font-size: 13px; font-weight: 600;
+    font-family: var(--font); cursor: pointer;
+    transition: background 0.15s;
+  }
+  .pass-try-again:hover { background: #2d0060; }
+
+  /* ── PAGE 4: ALL PASSWORDS FOUND ── */
+  .allpass-wrap { background: var(--white); border-radius: 4px; box-shadow: 0 2px 20px rgba(0,48,135,0.10); width: 100%; max-width: 600px; overflow: hidden; text-align: center; }
+  .allpass-top { background: linear-gradient(135deg, #1a0030, #4a0080); padding: 44px 40px 36px; }
+  .allpass-trophy { font-size: 64px; margin-bottom: 16px; animation: bounce 0.6s ease 0.2s both; }
+  @keyframes bounce { 0%{transform:scale(0.5);opacity:0} 70%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+  .allpass-stars { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; }
+  .allpass-star { font-size: 24px; animation: pop 0.4s ease both; }
+  .allpass-star:nth-child(1){animation-delay:0.4s} .allpass-star:nth-child(2){animation-delay:0.55s}
+  .allpass-star:nth-child(3){animation-delay:0.7s} .allpass-star:nth-child(4){animation-delay:0.85s}
+  .allpass-star:nth-child(5){animation-delay:1s}
+  @keyframes pop { 0%{transform:scale(0);opacity:0} 80%{transform:scale(1.3)} 100%{transform:scale(1);opacity:1} }
+  .allpass-top h1 { font-size: 26px; font-weight: 700; color: #ffd700; margin-bottom: 8px; }
+  .allpass-top p { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.65; max-width: 400px; margin: 0 auto; }
+  .allpass-body { padding: 28px 32px 36px; }
+  .allpass-list { background: #f4f6f9; border-radius: 4px; padding: 16px 20px; margin-bottom: 20px; text-align: left; }
+  .allpass-list h3 { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #4a0080; margin-bottom: 12px; }
+  .allpass-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .allpass-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .allpass-item-num { width: 24px; height: 24px; border-radius: 50%; background: #4a0080; color: #ffd700; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .allpass-item-pass { font-weight: 700; font-family: monospace; font-size: 14px; color: #1a0030; flex: 1; }
+  .allpass-item-hint { font-size: 11.5px; color: var(--muted); }
+  .allpass-lesson { background: #fff8e1; border: 1px solid #ffe082; border-radius: 4px; padding: 16px 20px; text-align: left; font-size: 13px; color: #5f4b00; line-height: 1.65; }
+  .allpass-lesson strong { display: block; margin-bottom: 6px; font-size: 13.5px; color: #3d2f00; }
 </style>
 </head>
 <body>
@@ -367,6 +434,28 @@
         <div class="answer-row" id="ans-row-city"><span data-i18n="debrief.ans.city">City grew up in</span><span>Sunshine Valley</span></div>
       </div>
 
+      <!-- Password challenge tracker — shown for hacker route -->
+      <div class="pass-challenge" id="pass-challenge" style="display:none;">
+        <h3>🔐 Password Challenge</h3>
+        <div class="pass-challenge-sub">There are <strong>5 hidden passwords</strong> based on Emma's public profile clues. You found one — go back to the login screen and try to crack the rest!</div>
+        <div class="pass-slots" id="pass-slots">
+          <div class="pass-slot" id="slot-0">🔒</div>
+          <div class="pass-slot" id="slot-1">🔒</div>
+          <div class="pass-slot" id="slot-2">🔒</div>
+          <div class="pass-slot" id="slot-3">🔒</div>
+          <div class="pass-slot" id="slot-4">🔒</div>
+        </div>
+        <div class="pass-count" id="pass-count"><strong>0</strong> of 5 passwords found</div>
+        <button class="pass-try-again" onclick="goToLoginForChallenge()">↩ Try Another Password</button>
+      </div>
+
+      <!-- Bonus challenge prompt — shown for OSINT route -->
+      <div id="osint-challenge-prompt" style="display:none; margin:0 32px 20px; background:#faf0ff; border:1px solid #e9d5ff; border-radius:4px; padding:16px 18px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:6px;">🎯 Bonus Challenge</div>
+        <div style="font-size:13px;color:#374151;line-height:1.6;margin-bottom:12px;">You used the security questions to get in. Now try the <strong>other route</strong> — go back to the login page and guess Emma's password directly. There are <strong>5 different passwords</strong> hidden as clues in her Instergram posts. Can you find all of them?</div>
+        <button class="pass-try-again" onclick="goToLoginForChallenge()" style="background:#7c3aed;">↩ Go Back &amp; Guess Passwords</button>
+      </div>
+
       <div class="debrief-body">
         <div class="lesson-card">
           <div class="lesson-card-head">
@@ -405,6 +494,62 @@
               <span data-i18n="lesson3.tip.body">1. Use random, unguessable answers for security questions and save them in a password manager.<br>2. Keep your social media profiles private, and think twice before posting birthdays, pet names, or hometowns.<br>3. Wherever possible, use a passkey or authenticator app instead of security questions entirely.</span>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+  <!-- PAGE 4: ALL 5 PASSWORDS FOUND -->
+  <div class="page" id="page-allpass">
+    <div class="allpass-wrap">
+      <div class="allpass-top">
+        <div class="allpass-trophy">🏆</div>
+        <div class="allpass-stars">
+          <span class="allpass-star">⭐</span>
+          <span class="allpass-star">⭐</span>
+          <span class="allpass-star">⭐</span>
+          <span class="allpass-star">⭐</span>
+          <span class="allpass-star">⭐</span>
+        </div>
+        <h1>All 5 Passwords Cracked!</h1>
+        <p>Outstanding! You found every single password Emma used ! All of them derived from personal details she posted publicly on Instergram.</p>
+      </div>
+
+      <div class="allpass-body">
+        <div class="allpass-list">
+          <h3>🔓 All 5 Passwords Found</h3>
+          <div class="allpass-item">
+            <div class="allpass-item-num">1</div>
+            <div class="allpass-item-pass">NightOwlALWAYS!</div>
+            <div class="allpass-item-hint">From her gaming all-nighter post</div>
+          </div>
+          <div class="allpass-item">
+            <div class="allpass-item-num">2</div>
+            <div class="allpass-item-pass">Biscuit2006!</div>
+            <div class="allpass-item-hint">Pet name + birth year</div>
+          </div>
+          <div class="allpass-item">
+            <div class="allpass-item-num">3</div>
+            <div class="allpass-item-pass">Emma2006!</div>
+            <div class="allpass-item-hint">Her first name + birth year</div>
+          </div>
+          <div class="allpass-item">
+            <div class="allpass-item-num">4</div>
+            <div class="allpass-item-pass">SunshineValleyMyLove!</div>
+            <div class="allpass-item-hint">Her hometown from the homecoming post</div>
+          </div>
+          <div class="allpass-item">
+            <div class="allpass-item-num">5</div>
+            <div class="allpass-item-pass">Finally20!!</div>
+            <div class="allpass-item-hint">From her birthday caption "Finally turning 18"</div>
+          </div>
+        </div>
+
+        <div class="allpass-lesson">
+          <strong>⚠️ What this proves</strong>
+          Every one of these passwords was built from information Emma shared openly on Instergram — her name, birth year, pet, hometown, and post captions. A real attacker wouldn't need any special tools. They'd just read her profile. The lesson: <strong>never use personal details as your password, and keep your social media private.</strong>
         </div>
       </div>
     </div>
@@ -609,6 +754,7 @@ function t(key) { return T[lang][key] || T['en'][key] || key; }
 /* ── HELPERS ── */
 const VALID_USERS  = ['emma.j.2006', 'emma.johansson06@gmail.com'];
 const EXACT_PASSES = ['NightOwlALWAYS!', 'Biscuit2006!', 'Emma2006!', 'SunshineValleyMyLove!', 'Finally20!!'];
+const foundPasswords = new Set();
 let loginAttempts = 0;
 
 function goTo(id) {
@@ -646,7 +792,7 @@ function tryLogin() {
   const userOk = VALID_USERS.includes(user.toLowerCase());
   const passOk = EXACT_PASSES.includes(pass);
 
-  if (userOk && passOk) { showDebrief('hacker'); return; }
+  if (userOk && passOk) { window._lastFoundPass = pass; showDebrief('hacker'); return; }
 
   pEl.classList.add('err');
   loginAttempts++;
@@ -760,6 +906,16 @@ function confirmReset() {
   showDebrief('osint');
 }
 
+function goToLoginForChallenge() {
+  // Clear password field only, keep username
+  const passEl = document.getElementById('inp-pass');
+  if (passEl) passEl.value = '';
+  const msgEl = document.getElementById('login-msg');
+  if (msgEl) { msgEl.textContent = ''; msgEl.className = 'msg-box'; }
+  document.getElementById('inp-pass') && document.getElementById('inp-pass').classList.remove('err');
+  goTo('page-login');
+}
+
 /* ── DEBRIEF ── */
 function showDebrief(route) {
   const top   = document.getElementById('debrief-top');
@@ -774,15 +930,40 @@ function showDebrief(route) {
   top.className = 'debrief-top route-' + route;
 
   if (route === 'hacker') {
+    // Track found password
+    if (window._lastFoundPass) foundPasswords.add(window._lastFoundPass);
+
+    // All 5 found — go to celebration page
+    if (foundPasswords.size >= 5) { goTo('page-allpass'); return; }
+
     icon.textContent = '🏆';
     badge.textContent = t('debrief.hacker.badge');
     title.textContent = t('debrief.hacker.title');
     desc.textContent  = t('debrief.hacker.desc');
     ansTitle.textContent = t('debrief.hacker.ans.title');
     document.querySelector('#debrief-answers .answer-row span:first-child').textContent = t('debrief.hacker.ans.row1.label');
-    document.querySelector('#debrief-answers .answer-row span:last-child').textContent  = 'Try out different passwords! I setted 5 diff password for u to crack!';
+    document.querySelector('#debrief-answers .answer-row span:last-child').textContent  = window._lastFoundPass || '';
     rowDob.style.display  = 'none';
     rowCity.style.display = 'none';
+
+    // Show password challenge tracker, hide OSINT prompt
+    document.getElementById('pass-challenge').style.display = 'block';
+    document.getElementById('osint-challenge-prompt').style.display = 'none';
+
+    // Update slots
+    const emojis = ['🔓','🔓','🔓','🔓','🔓'];
+    let idx = 0;
+    EXACT_PASSES.forEach((p, i) => {
+      const slot = document.getElementById('slot-' + i);
+      if (foundPasswords.has(p)) {
+        slot.textContent = '✅';
+        slot.classList.add('found');
+      } else {
+        slot.textContent = '🔒';
+        slot.classList.remove('found');
+      }
+    });
+    document.getElementById('pass-count').innerHTML = '<strong>' + foundPasswords.size + '</strong> of 5 passwords found';
   } else {
     icon.textContent = '🔓';
     badge.textContent = t('debrief.osint.badge');
@@ -793,6 +974,10 @@ function showDebrief(route) {
     document.querySelector('#debrief-answers .answer-row span:last-child').textContent  = 'Biscuit';
     rowDob.style.display  = '';
     rowCity.style.display = '';
+
+    // Show bonus challenge, hide hacker tracker
+    document.getElementById('pass-challenge').style.display = 'none';
+    document.getElementById('osint-challenge-prompt').style.display = 'block';
   }
 
   goTo('page-debrief');
