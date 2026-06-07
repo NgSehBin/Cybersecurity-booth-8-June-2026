@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/fakeAcc.html"
+      "destination": "fakeInsta/fakeAcc.html"
     }
   ]
 }
