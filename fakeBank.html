@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecureBank — Online Banking</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #003087; --blue-mid: #0051a8; --blue-light: #0066cc;
+    --gold: #c8952a; --bg: #f4f6f9; --white: #ffffff;
+    --text: #1a1a2e; --muted: #6b7280; --border: #d8dde6;
+    --error: #c0392b; --success: #1a7a4a; --warn: #d97706;
+    --font: 'Inter', sans-serif;
+  }
+  body { font-family: var(--font); background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; color: var(--text); }
+
+  /* ── HEADER ── */
+  header { background: var(--blue); height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; flex-shrink: 0; }
+  .bank-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-mark { width: 34px; height: 34px; background: var(--gold); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: var(--blue); flex-shrink: 0; }
+  .logo-text { color: #fff; font-size: 17px; font-weight: 600; }
+  .logo-text span { color: var(--gold); }
+  .header-right { display: flex; align-items: center; gap: 24px; }
+  header nav { display: flex; gap: 24px; }
+  header nav a { color: rgba(255,255,255,0.7); font-size: 13px; text-decoration: none; }
+  header nav a:hover { color: #fff; }
+
+  /* Language toggle */
+  .lang-toggle { display: flex; border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; overflow: hidden; }
+  .lang-btn { padding: 4px 12px; font-size: 12px; font-weight: 600; font-family: var(--font); border: none; cursor: pointer; transition: background 0.15s, color 0.15s; background: transparent; color: rgba(255,255,255,0.6); letter-spacing: 0.03em; }
+  .lang-btn.active { background: var(--gold); color: var(--blue); }
+  .lang-btn:hover:not(.active) { color: #fff; }
+
+  /* ── SECURITY STRIP ── */
+  .security-strip { background: #002068; padding: 7px 40px; display: flex; align-items: center; gap: 8px; }
+  .security-strip svg { flex-shrink: 0; }
+  .security-strip span { font-size: 11.5px; color: rgba(255,255,255,0.65); }
+  .security-strip span b { color: rgba(255,255,255,0.9); font-weight: 500; }
+
+  /* ── MAIN ── */
+  main { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 36px 20px 40px; }
+  .page { display: none; width: 100%; justify-content: center; }
+  .page.active { display: flex; }
+
+  /* ── SHARED FORM ── */
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 11.5px; font-weight: 600; color: #374151; margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .form-input { width: 100%; border: 1px solid var(--border); border-radius: 3px; padding: 11px 14px; font-size: 14px; font-family: var(--font); color: var(--text); background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+  .form-input:focus { border-color: var(--blue-light); box-shadow: 0 0 0 3px rgba(0,102,204,0.12); }
+  .form-input.err { border-color: var(--error); box-shadow: 0 0 0 3px rgba(192,57,43,0.1); }
+  .form-input.ok  { border-color: var(--success); box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+  .btn-primary { width: 100%; background: var(--blue); color: #fff; border: none; border-radius: 3px; padding: 13px; font-size: 14px; font-weight: 600; font-family: var(--font); cursor: pointer; letter-spacing: 0.02em; transition: background 0.15s; }
+  .btn-primary:hover:not(:disabled) { background: var(--blue-mid); }
+  .btn-primary:disabled { background: #9ab0d4; cursor: not-allowed; }
+  .btn-outline { width: 100%; background: #fff; color: var(--blue); border: 1.5px solid var(--blue); border-radius: 3px; padding: 11px; font-size: 13px; font-weight: 600; font-family: var(--font); cursor: pointer; margin-top: 10px; transition: background 0.15s; }
+  .btn-outline:hover { background: #f0f5ff; }
+  .msg-box { border-radius: 3px; padding: 10px 14px; font-size: 13px; margin-top: 12px; display: none; line-height: 1.5; }
+  .msg-box.err  { background: #fdf2f2; border-left: 3px solid var(--error); color: var(--error); display: block; }
+  .msg-box.warn { background: #fffbeb; border-left: 3px solid var(--warn);  color: #78350f; display: block; }
+  .form-link { font-size: 13px; color: var(--blue-light); cursor: pointer; }
+  .form-link:hover { text-decoration: underline; }
+  .form-footer { margin-top: auto; padding-top: 20px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .form-footer a { font-size: 11px; color: var(--muted); text-decoration: none; }
+  .form-footer a:hover { text-decoration: underline; }
+
+  /* ── PAGE 1 LOGIN ── */
+  .login-wrap { display: flex; background: var(--white); border-radius: 4px; box-shadow: 0 2px 20px rgba(0,48,135,0.10); overflow: hidden; width: 100%; max-width: 820px; }
+  .login-side { background: linear-gradient(160deg, #003087 0%, #0051a8 100%); width: 280px; flex-shrink: 0; padding: 44px 32px; display: flex; flex-direction: column; justify-content: space-between; }
+  .login-side h2 { font-size: 22px; font-weight: 600; color: #fff; line-height: 1.35; margin-bottom: 10px; }
+  .login-side > div > p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+  .side-features { margin-top: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .side-feature { display: flex; align-items: flex-start; gap: 10px; }
+  .side-feature-icon { width: 28px; height: 28px; background: rgba(255,255,255,0.12); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .side-feature-text { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+  .side-feature-text b { color: rgba(255,255,255,0.92); font-weight: 600; display: block; margin-bottom: 1px; }
+  .side-bottom { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .login-form-wrap { flex: 1; padding: 44px 40px; display: flex; flex-direction: column; }
+  .form-title { font-size: 20px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .form-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .form-check { display: flex; align-items: center; gap: 7px; }
+  .form-check input { accent-color: var(--blue); cursor: pointer; }
+  .form-check label { font-size: 13px; color: var(--muted); cursor: pointer; }
+  .form-divider { display: flex; align-items: center; gap: 10px; margin: 18px 0; font-size: 12px; color: var(--muted); }
+  .form-divider::before, .form-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .forgot-gate { display: none; background: #f8faff; border: 1px solid #c5d5ee; border-radius: 4px; padding: 16px 18px; margin-top: 14px; }
+  .forgot-gate.show { display: block; }
+  .forgot-gate-title { font-size: 13px; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+  .forgot-gate-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+
+  /* ── PAGE 2 RESET ── */
+  .reset-wrap { background: var(--white); border-radius: 4px; box-shadow: 0 2px 20px rgba(0,48,135,0.10); width: 100%; max-width: 520px; overflow: hidden; }
+  .reset-header { background: var(--blue); padding: 20px 32px; display: flex; align-items: center; gap: 12px; }
+  .reset-header-icon { width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .reset-header h2 { font-size: 16px; font-weight: 600; color: #fff; }
+  .reset-header p { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .reset-body { padding: 28px 32px; }
+  .reset-back { font-size: 13px; color: var(--blue-light); cursor: pointer; display: inline-block; margin-bottom: 20px; }
+  .reset-back:hover { text-decoration: underline; }
+  .sq-label { font-size: 10.5px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .sq-question { font-size: 13.5px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+  .new-pass-section { display: none; border-top: 1px solid var(--border); margin-top: 20px; padding-top: 22px; }
+  .new-pass-section.show { display: block; }
+  .new-pass-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .new-pass-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+
+  /* ── STRENGTH METER ── */
+  .strength-wrap { margin-top: 10px; }
+  .strength-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1.5px solid var(--border); color: var(--muted); background: #f4f6f9; transition: all 0.2s; }
+  .chip.active { border-color: currentColor; background: transparent; }
+  .chip.chip-sym { color: #7c3aed; } .chip.chip-num { color: #0369a1; }
+  .chip.chip-up  { color: #b45309; } .chip.chip-low { color: #047857; }
+  .chip.chip-len { color: #be185d; }
+  .chip .chip-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.35; transition: opacity 0.2s; }
+  .chip.active .chip-dot { opacity: 1; }
+  .strength-char { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .strength-char span { font-weight: 600; color: var(--text); }
+  .strength-crack-wrap { background: #f4f6f9; border: 1px solid var(--border); border-radius: 4px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+  .strength-crack-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .strength-crack-time { font-size: 16px; font-weight: 700; color: var(--text); }
+  .strength-crack-time.instantly { color: #dc2626; }
+  .strength-crack-time.weak { color: #ea580c; }
+  .strength-crack-time.medium { color: #ca8a04; }
+  .strength-crack-time.strong { color: #16a34a; }
+
+  /* ── PAGE 3 DEBRIEF ── */
+  .debrief-wrap { background: var(--white); border-radius: 4px; box-shadow: 0 2px 20px rgba(0,48,135,0.10); width: 100%; max-width: 680px; overflow: hidden; }
+  .debrief-top { padding: 36px 40px 30px; text-align: center; }
+  .debrief-top.route-osint  { background: linear-gradient(135deg, #003087, #0051a8); }
+  .debrief-top.route-hacker { background: linear-gradient(135deg, #1a0030, #4a0080); }
+  .debrief-shield { width: 68px; height: 68px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px; }
+  .debrief-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+  .route-osint  .debrief-badge { background: rgba(255,255,255,0.18); color: #fff; }
+  .route-hacker .debrief-badge { background: #ffd700; color: #2d0060; }
+  .debrief-top h1 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .debrief-top p { font-size: 13.5px; color: rgba(255,255,255,0.75); line-height: 1.65; max-width: 480px; margin: 0 auto; }
+  .debrief-answers { background: #f4f6f9; border-radius: 4px; padding: 16px 20px; margin: 20px 32px; }
+  .debrief-answers h3 { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--blue); margin-bottom: 10px; }
+  .answer-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 7px; }
+  .answer-row:last-child { margin-bottom: 0; }
+  .answer-row span:first-child { color: var(--muted); }
+  .answer-row span:last-child { font-weight: 600; color: var(--text); }
+  .debrief-body { padding: 0 32px 32px; display: flex; flex-direction: column; gap: 14px; }
+  .lesson-card { border-radius: 4px; border: 1px solid var(--border); overflow: hidden; }
+  .lesson-card-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #f8faff; border-bottom: 1px solid var(--border); }
+  .lesson-card-icon { width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .icon-osint { background: #dbeafe; } .icon-flaw { background: #fef3c7; } .icon-defense { background: #dcfce7; }
+  .lesson-card-head h3 { font-size: 13px; font-weight: 700; color: var(--text); }
+  .lesson-card-head span { font-size: 11px; color: var(--muted); margin-left: auto; font-weight: 500; }
+  .lesson-card-body { padding: 14px 16px; font-size: 13px; color: #374151; line-height: 1.7; }
+  .lesson-card-body strong { color: var(--text); }
+  .tip-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 3px; padding: 10px 14px; margin-top: 10px; font-size: 12.5px; color: #14532d; line-height: 1.6; }
+  .tip-box b { display: block; margin-bottom: 3px; font-size: 13px; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--blue); padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  footer span { font-size: 11px; color: rgba(255,255,255,0.4); }
+  footer nav { display: flex; gap: 20px; }
+  footer nav a { font-size: 11px; color: rgba(255,255,255,0.45); text-decoration: none; }
+  footer nav a:hover { color: rgba(255,255,255,0.85); }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="bank-logo" href="#">
+    <div class="logo-mark">SB</div>
+    <div class="logo-text">Secure<span>Bank</span></div>
+  </a>
+  <div class="header-right">
+    <nav>
+      <a href="#" data-i18n="nav.personal">Personal</a>
+      <a href="#" data-i18n="nav.business">Business</a>
+      <a href="#" data-i18n="nav.investments">Investments</a>
+      <a href="#" data-i18n="nav.help">Help</a>
+    </nav>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn"        id="btn-bm" onclick="setLang('bm')">BM</button>
+    </div>
+  </div>
+</header>
+
+<div class="security-strip">
+  <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+  <span data-i18n="security.strip"><b>secure and encrypted</b></span>
+</div>
+
+<main>
+
+  <!-- PAGE 1: LOGIN -->
+  <div class="page active" id="page-login">
+    <div class="login-wrap">
+      <div class="login-side">
+        <div>
+          <h2 data-i18n="login.side.title">Welcome to Online Banking</h2>
+          <p data-i18n="login.side.sub">Manage your accounts, payments and more — securely, anytime.</p>
+          <div class="side-features">
+            <div class="side-feature">
+              <div class="side-feature-icon">💳</div>
+              <div class="side-feature-text"><b data-i18n="login.feat1.title">Account Overview</b><span data-i18n="login.feat1.desc">View balances and recent transactions in real time.</span></div>
+            </div>
+            <div class="side-feature">
+              <div class="side-feature-icon">↗</div>
+              <div class="side-feature-text"><b data-i18n="login.feat2.title">Fund Transfers</b><span data-i18n="login.feat2.desc">Send money instantly to any local or overseas account.</span></div>
+            </div>
+            <div class="side-feature">
+              <div class="side-feature-icon">🔔</div>
+              <div class="side-feature-text"><b data-i18n="login.feat3.title">Alerts &amp; Notifications</b><span data-i18n="login.feat3.desc">Stay informed with instant transaction alerts.</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="side-bottom" data-i18n="login.side.copy">© 2026 SecureBank Berhad. All rights reserved.</div>
+      </div>
+
+      <div class="login-form-wrap">
+        <div class="form-title" data-i18n="login.form.title">Sign in to your account</div>
+        <div class="form-sub"   data-i18n="login.form.sub">Enter your credentials to access Online Banking.</div>
+
+        <div class="form-group">
+          <label class="form-label" data-i18n="login.label.user">Username / Email</label>
+          <input class="form-input" id="inp-user" type="text" placeholder="e.g. emma.johansson06@gmail.com" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="login.label.pass">Password</label>
+          <input class="form-input" id="inp-pass" type="password" autocomplete="current-password">
+        </div>
+
+        <div class="form-row">
+          <label class="form-check">
+            <input type="checkbox" id="remember-me">
+            <label for="remember-me" data-i18n="login.remember">Remember my username</label>
+          </label>
+          <a class="form-link" onclick="showForgotGate()" data-i18n="login.forgot">Forgot password?</a>
+        </div>
+
+        <button class="btn-primary" onclick="tryLogin()" data-i18n="login.btn">Sign In</button>
+        <div class="msg-box" id="login-msg"></div>
+
+        <div class="forgot-gate" id="forgot-gate">
+          <div class="forgot-gate-title" data-i18n="gate.title">🔒 Verify Account Identity</div>
+          <div class="forgot-gate-sub"   data-i18n="gate.sub">To proceed with a password reset, please confirm the username or email address linked to this account.</div>
+          <div class="form-group" style="margin-bottom:10px;">
+            <input class="form-input" id="gate-user" type="text">
+          </div>
+          <button class="btn-primary" style="padding:11px;" onclick="tryGate()" data-i18n="gate.btn">Continue to Security Questions →</button>
+          <div class="msg-box" id="gate-msg"></div>
+        </div>
+
+        <div class="form-footer">
+          <a href="#" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="#" data-i18n="footer.terms">Terms &amp; Conditions</a>
+          <a href="#" data-i18n="footer.security">Security Tips</a>
+          <a href="#" data-i18n="footer.contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: RESET -->
+  <div class="page" id="page-reset">
+    <div class="reset-wrap">
+      <div class="reset-header">
+        <div class="reset-header-icon">🔑</div>
+        <div>
+          <h2 data-i18n="reset.header.title">Reset Your Password</h2>
+          <p  data-i18n="reset.header.sub">Answer your security questions, then set a new password.</p>
+        </div>
+      </div>
+
+      <div class="reset-body">
+        <a class="reset-back" onclick="goTo('page-login')" data-i18n="reset.back">← Back to Sign In</a>
+
+        <div class="form-group">
+          <div class="sq-label" data-i18n="sq1.label">Security Question 1</div>
+          <div class="sq-question" data-i18n="sq1.q">What is the name of your first pet?</div>
+          <input class="form-input" id="sq1" type="text">
+        </div>
+        <div class="form-group">
+          <div class="sq-label" data-i18n="sq2.label">Security Question 2</div>
+          <div class="sq-question" data-i18n="sq2.q">What is your date of birth? (DD/MM/YYYY)</div>
+          <input class="form-input" id="sq2" type="text">
+        </div>
+        <div class="form-group">
+          <div class="sq-label" data-i18n="sq3.label">Security Question 3</div>
+          <div class="sq-question" data-i18n="sq3.q">What city did you grow up in?</div>
+          <input class="form-input" id="sq3" type="text">
+        </div>
+
+        <button class="btn-primary" onclick="trySecurityQs()" data-i18n="reset.verify.btn">Verify Identity</button>
+        <div class="msg-box" id="sq-msg"></div>
+
+        <div class="new-pass-section" id="new-pass-section">
+          <div class="new-pass-title" data-i18n="newpass.title">✅ Identity Verified — Set a New Password</div>
+          <div class="new-pass-sub"   data-i18n="newpass.sub">Choose a strong password. The "Confirm Reset" button unlocks once your password would take at least <strong>days</strong> to crack.</div>
+
+          <div class="form-group">
+            <label class="form-label" data-i18n="newpass.label">New Password</label>
+            <input class="form-input" id="new-pass" type="password" oninput="checkStrength()">
+            <div class="strength-wrap">
+              <div class="strength-char"><span id="char-count">0</span> <span data-i18n="strength.chars">characters containing:</span></div>
+              <div class="strength-chips">
+                <div class="chip chip-up"  id="chip-up" ><div class="chip-dot"></div><span data-i18n="chip.upper">Upper case</span></div>
+                <div class="chip chip-low" id="chip-low"><div class="chip-dot"></div><span data-i18n="chip.lower">Lower case</span></div>
+                <div class="chip chip-num" id="chip-num"><div class="chip-dot"></div><span data-i18n="chip.numbers">Numbers</span></div>
+                <div class="chip chip-sym" id="chip-sym"><div class="chip-dot"></div><span data-i18n="chip.symbols">Symbols</span></div>
+                <div class="chip chip-len" id="chip-len"><div class="chip-dot"></div><span data-i18n="chip.length">12+ chars</span></div>
+              </div>
+              <div class="strength-crack-wrap">
+                <div class="strength-crack-label" data-i18n="strength.crack.label">Time to crack your password</div>
+                <div class="strength-crack-time instantly" id="crack-time">—</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="newpass.confirm.label">Confirm New Password</label>
+            <input class="form-input" id="confirm-pass" type="password">
+          </div>
+          <button class="btn-primary" id="btn-confirm-reset" onclick="confirmReset()" disabled data-i18n="newpass.confirm.btn">Confirm Reset</button>
+          <div class="msg-box" id="confirm-msg"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: DEBRIEF -->
+  <div class="page" id="page-debrief">
+    <div class="debrief-wrap">
+      <div class="debrief-top" id="debrief-top">
+        <div class="debrief-shield" id="debrief-icon">🔓</div>
+        <div class="debrief-badge" id="debrief-badge">Account Unlocked</div>
+        <h1 id="debrief-title">You're in!</h1>
+        <p  id="debrief-desc">You successfully accessed Emma's bank account.</p>
+      </div>
+
+      <div class="debrief-answers" id="debrief-answers">
+        <h3 id="debrief-answers-title" data-i18n="debrief.ans.title">Clues found on Instagram</h3>
+        <div class="answer-row"><span data-i18n="debrief.ans.pet">First pet's name</span><span>Biscuit</span></div>
+        <div class="answer-row" id="ans-row-dob"><span data-i18n="debrief.ans.dob">Date of birth</span><span>14/03/2006</span></div>
+        <div class="answer-row" id="ans-row-city"><span data-i18n="debrief.ans.city">City grew up in</span><span>Sunshine Valley</span></div>
+      </div>
+
+      <div class="debrief-body">
+        <div class="lesson-card">
+          <div class="lesson-card-head">
+            <div class="lesson-card-icon icon-osint">🌐</div>
+            <h3 data-i18n="lesson1.title">What is OSINT?</h3>
+            <span data-i18n="lesson1.tag">Open-Source Intelligence</span>
+          </div>
+          <div class="lesson-card-body" data-i18n="lesson1.body">
+            <strong>OSINT</strong> is the practice of collecting information about a target using only <strong>publicly available sources</strong> — social media posts, photos, bios, comments, and check-ins. You don't need to hack anything. You just need to look.<br><br>
+            Attackers routinely scan Instagram, Facebook, LinkedIn and TikTok profiles before attempting any account takeover. In this activity, Emma's birthday, her pet's name and her hometown were all sitting in plain sight on her public profile — enough to reset her bank password without ever knowing it.
+          </div>
+        </div>
+
+        <div class="lesson-card">
+          <div class="lesson-card-head">
+            <div class="lesson-card-icon icon-flaw">⚠️</div>
+            <h3 data-i18n="lesson2.title">The Flaw in Security Questions</h3>
+            <span data-i18n="lesson2.tag">Why they're dangerous</span>
+          </div>
+          <div class="lesson-card-body" data-i18n="lesson2.body">
+            Security questions were designed as a <strong>backup password</strong> — but people treat the answers as public facts. Nobody hides their birthday. Everyone posts about their dog. These facts feel harmless individually, but together they become a master key.<br><br>
+            Unlike a real password, a security question answer never changes. Once an attacker finds it on social media, it works <em>forever</em>. This is why many security researchers call security questions one of the weakest links in modern authentication.
+          </div>
+        </div>
+
+        <div class="lesson-card">
+          <div class="lesson-card-head">
+            <div class="lesson-card-icon icon-defense">🛡️</div>
+            <h3 data-i18n="lesson3.title">How to Defend Yourself</h3>
+            <span data-i18n="lesson3.tag">Best practices</span>
+          </div>
+          <div class="lesson-card-body">
+            <span data-i18n="lesson3.body">The most effective defence is simple: <strong>lie on security questions</strong>.<br><br>When a website asks "What is your mother's maiden name?", don't answer truthfully. Treat it like a second password — type something completely random — and store it in a <strong>password manager</strong> so you don't forget it.</span>
+            <div class="tip-box">
+              <b data-i18n="lesson3.tip.title">✅ Three habits to start today</b>
+              <span data-i18n="lesson3.tip.body">1. Use random, unguessable answers for security questions and save them in a password manager.<br>2. Keep your social media profiles private, and think twice before posting birthdays, pet names, or hometowns.<br>3. Wherever possible, use a passkey or authenticator app instead of security questions entirely.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span data-i18n="footer.copy">© 2026 SecureBank Berhad (123456-X) · Licensed by Bank Negara Malaysia</span>
+  <nav>
+    <a href="#" data-i18n="footer.privacy">Privacy</a>
+    <a href="#" data-i18n="footer.security.lnk">Security</a>
+    <a href="#" data-i18n="footer.fraud">Fraud Alerts</a>
+    <a href="#" data-i18n="footer.access">Accessibility</a>
+  </nav>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════
+   TRANSLATIONS
+══════════════════════════════════════════════ */
+const T = {
+  en: {
+    'nav.personal': 'Personal', 'nav.business': 'Business',
+    'nav.investments': 'Investments', 'nav.help': 'Help',
+    'security.strip': 'Your connection is <b>secure and encrypted</b> · 256-bit SSL · SecureBank will never ask for your full password',
+
+    'login.side.title': 'Welcome to Online Banking',
+    'login.side.sub': 'Manage your accounts, payments and more — securely, anytime.',
+    'login.feat1.title': 'Account Overview', 'login.feat1.desc': 'View balances and recent transactions in real time.',
+    'login.feat2.title': 'Fund Transfers',   'login.feat2.desc': 'Send money instantly to any local or overseas account.',
+    'login.feat3.title': 'Alerts & Notifications', 'login.feat3.desc': 'Stay informed with instant transaction alerts.',
+    'login.side.copy': '© 2026 SecureBank Berhad. All rights reserved.',
+    'login.form.title': 'Sign in to your account',
+    'login.form.sub': 'Enter your credentials to access Online Banking.',
+    'login.label.user': 'Username / Email', 'login.label.pass': 'Password',
+    'login.remember': 'Remember my username', 'login.forgot': 'Forgot password?',
+    'login.btn': 'Sign In',
+
+    'gate.title': '🔒 Verify Account Identity',
+    'gate.sub': 'To proceed with a password reset, please confirm the username or email address linked to this account.',
+    'gate.btn': 'Continue to Security Questions →',
+
+    'reset.header.title': 'Reset Your Password',
+    'reset.header.sub': 'Answer your security questions, then set a new password.',
+    'reset.back': '← Back to Sign In',
+    'sq1.label': 'Security Question 1', 'sq1.q': 'What is the name of your first pet?',
+    'sq2.label': 'Security Question 2', 'sq2.q': 'What is your date of birth? (DD/MM/YYYY)',
+    'sq3.label': 'Security Question 3', 'sq3.q': 'What city did you grow up in?',
+    'reset.verify.btn': 'Verify Identity',
+
+    'newpass.title': '✅ Identity Verified — Set a New Password',
+    'newpass.sub': 'Choose a strong password. The "Confirm Reset" button unlocks once your password would take at least <strong>days</strong> to crack.',
+    'newpass.label': 'New Password', 'newpass.confirm.label': 'Confirm New Password',
+    'newpass.confirm.btn': 'Confirm Reset',
+    'strength.chars': 'characters containing:',
+    'chip.upper': 'Upper case', 'chip.lower': 'Lower case',
+    'chip.numbers': 'Numbers', 'chip.symbols': 'Symbols', 'chip.length': '12+ chars',
+    'strength.crack.label': 'Time to crack your password',
+
+    'debrief.ans.title': 'Clues found on Instagram',
+    'debrief.ans.pet': 'First pet\'s name', 'debrief.ans.dob': 'Date of birth', 'debrief.ans.city': 'City grew up in',
+
+    'lesson1.title': 'What is OSINT?', 'lesson1.tag': 'Open-Source Intelligence',
+    'lesson1.body': '<strong>OSINT</strong> is the practice of collecting information about a target using only <strong>publicly available sources</strong> — social media posts, photos, bios, comments, and check-ins. You don\'t need to hack anything. You just need to look.<br><br>Attackers routinely scan Instagram, Facebook, LinkedIn and TikTok profiles before attempting any account takeover. In this activity, Emma\'s birthday, her pet\'s name and her hometown were all sitting in plain sight on her public profile — enough to reset her bank password without ever knowing it.',
+    'lesson2.title': 'The Flaw in Security Questions', 'lesson2.tag': 'Why they\'re dangerous',
+    'lesson2.body': 'Security questions were designed as a <strong>backup password</strong> — but people treat the answers as public facts. Nobody hides their birthday. Everyone posts about their dog. These facts feel harmless individually, but together they become a master key.<br><br>Unlike a real password, a security question answer never changes. Once an attacker finds it on social media, it works <em>forever</em>. This is why many security researchers call security questions one of the weakest links in modern authentication.',
+    'lesson3.title': 'How to Defend Yourself', 'lesson3.tag': 'Best practices',
+    'lesson3.body': 'The most effective defence is simple: <strong>lie on security questions</strong>.<br><br>When a website asks "What is your mother\'s maiden name?", don\'t answer truthfully. Treat it like a second password — type something completely random — and store it in a <strong>password manager</strong> so you don\'t forget it.',
+    'lesson3.tip.title': '✅ Three habits to start today',
+    'lesson3.tip.body': '1. Use random, unguessable answers for security questions and save them in a password manager.<br>2. Keep your social media profiles private, and think twice before posting birthdays, pet names, or hometowns.<br>3. Wherever possible, use a passkey or authenticator app instead of security questions entirely.',
+
+    'footer.copy': '© 2026 SecureBank Berhad (123456-X) · Licensed by Bank Negara Malaysia',
+    'footer.privacy': 'Privacy Policy', 'footer.terms': 'Terms & Conditions',
+    'footer.security': 'Security Tips', 'footer.contact': 'Contact Us',
+    'footer.security.lnk': 'Security', 'footer.fraud': 'Fraud Alerts', 'footer.access': 'Accessibility',
+
+    // Dynamic messages
+    'msg.no.user': 'Please enter your username or email.',
+    'msg.no.pass': 'Please enter your password.',
+    'msg.wrong.pass': 'Incorrect username or password. Please try again.',
+    'msg.locked': 'Multiple failed attempts detected. Please reset your password using the "Forgot Password" option below.',
+    'msg.gate.fail': 'We could not find an account with that username or email. Please check and try again.',
+    'msg.sq.fail.prefix': 'Incorrect answers: ', 'msg.sq.fail.suffix': '. Check the profile again and retry.',
+    'msg.sq.field.pet': 'pet name', 'msg.sq.field.dob': 'date of birth', 'msg.sq.field.city': 'home city',
+    'msg.pass.mismatch': 'Passwords do not match. Please try again.',
+    'crack.instantly': 'Instantly', 'crack.seconds': 'seconds', 'crack.minutes': 'minutes',
+    'crack.hours': 'hours', 'crack.days': 'days', 'crack.months': 'months',
+    'crack.years': 'years', 'crack.kyears': 'k years', 'crack.centuries': 'Centuries',
+
+    // Debrief dynamic text
+    'debrief.hacker.badge': '★ Master Hacker — Password Guessed!',
+    'debrief.hacker.title': 'You cracked the password directly!',
+    'debrief.hacker.desc': 'You guessed Emma\'s exact password — likely because she used personal details from her social media as her password. This is exactly how real accounts get compromised.',
+    'debrief.hacker.ans.title': 'Why the password was guessable',
+    'debrief.hacker.ans.row1.label': 'Password used',
+    'debrief.osint.badge': 'Account Unlocked via OSINT',
+    'debrief.osint.title': 'You\'re in — no password needed!',
+    'debrief.osint.desc': 'You reset Emma\'s password using answers found on her public Instagram profile. No hacking tools, no technical skills — just reading her posts.',
+    'debrief.osint.ans.title': 'Clues found on Instagram',
+  },
+
+  bm: {
+    'nav.personal': 'Peribadi', 'nav.business': 'Perniagaan',
+    'nav.investments': 'Pelaburan', 'nav.help': 'Bantuan',
+    'security.strip': 'Sambungan anda adalah <b>selamat dan disulitkan</b> · SSL 256-bit · SecureBank tidak akan meminta kata laluan penuh anda',
+
+    'login.side.title': 'Selamat Datang ke Perbankan Dalam Talian',
+    'login.side.sub': 'Urus akaun, pembayaran dan lebih lagi — dengan selamat, bila-bila masa.',
+    'login.feat1.title': 'Gambaran Keseluruhan Akaun', 'login.feat1.desc': 'Semak baki dan transaksi terkini secara masa nyata.',
+    'login.feat2.title': 'Pindahan Dana', 'login.feat2.desc': 'Hantar wang serta-merta ke mana-mana akaun tempatan atau luar negara.',
+    'login.feat3.title': 'Amaran & Pemberitahuan', 'login.feat3.desc': 'Sentiasa dimaklumkan dengan amaran transaksi segera.',
+    'login.side.copy': '© 2026 SecureBank Berhad. Hak cipta terpelihara.',
+    'login.form.title': 'Log masuk ke akaun anda',
+    'login.form.sub': 'Masukkan kelayakan anda untuk mengakses Perbankan Dalam Talian.',
+    'login.label.user': 'Nama Pengguna / E-mel', 'login.label.pass': 'Kata Laluan',
+    'login.remember': 'Ingat nama pengguna saya', 'login.forgot': 'Lupa kata laluan?',
+    'login.btn': 'Log Masuk',
+
+    'gate.title': '🔒 Sahkan Identiti Akaun',
+    'gate.sub': 'Untuk meneruskan penetapan semula kata laluan, sila sahkan nama pengguna atau alamat e-mel yang dikaitkan dengan akaun ini.',
+    'gate.btn': 'Teruskan ke Soalan Keselamatan →',
+
+    'reset.header.title': 'Tetapkan Semula Kata Laluan',
+    'reset.header.sub': 'Jawab soalan keselamatan anda, kemudian tetapkan kata laluan baharu.',
+    'reset.back': '← Kembali ke Log Masuk',
+    'sq1.label': 'Soalan Keselamatan 1', 'sq1.q': 'Apakah nama haiwan peliharaan pertama anda?',
+    'sq2.label': 'Soalan Keselamatan 2', 'sq2.q': 'Apakah tarikh lahir anda? (HH/BB/TTTT)',
+    'sq3.label': 'Soalan Keselamatan 3', 'sq3.q': 'Bandar apakah tempat anda membesar?',
+    'reset.verify.btn': 'Sahkan Identiti',
+
+    'newpass.title': '✅ Identiti Disahkan — Tetapkan Kata Laluan Baharu',
+    'newpass.sub': 'Pilih kata laluan yang kuat. Butang "Sahkan Tetapan Semula" akan diaktifkan apabila kata laluan anda memerlukan sekurang-kurangnya <strong>beberapa hari</strong> untuk dipecahkan.',
+    'newpass.label': 'Kata Laluan Baharu', 'newpass.confirm.label': 'Sahkan Kata Laluan Baharu',
+    'newpass.confirm.btn': 'Sahkan Tetapan Semula',
+    'strength.chars': 'aksara mengandungi:',
+    'chip.upper': 'Huruf besar', 'chip.lower': 'Huruf kecil',
+    'chip.numbers': 'Nombor', 'chip.symbols': 'Simbol', 'chip.length': '12+ aksara',
+    'strength.crack.label': 'Masa untuk memecahkan kata laluan anda',
+
+    'debrief.ans.title': 'Petunjuk ditemui di Instagram',
+    'debrief.ans.pet': 'Nama haiwan peliharaan pertama', 'debrief.ans.dob': 'Tarikh lahir', 'debrief.ans.city': 'Bandar tempat membesar',
+
+    'lesson1.title': 'Apakah OSINT?', 'lesson1.tag': 'Perisikan Sumber Terbuka',
+    'lesson1.body': '<strong>OSINT</strong> ialah amalan mengumpul maklumat tentang sasaran menggunakan hanya <strong>sumber yang tersedia secara awam</strong> — catatan media sosial, foto, bio, komen, dan daftar masuk. Anda tidak perlu menggodam apa-apa. Anda hanya perlu melihat.<br><br>Penyerang sering mengimbas profil Instagram, Facebook, LinkedIn dan TikTok sebelum mencuba pengambilalihan akaun. Dalam aktiviti ini, tarikh lahir Emma, nama haiwan peliharaannya dan kampung halamannya semuanya kelihatan jelas di profilnya yang awam — cukup untuk menetapkan semula kata laluan bank tanpa mengetahuinya.',
+    'lesson2.title': 'Kelemahan Soalan Keselamatan', 'lesson2.tag': 'Mengapa ia berbahaya',
+    'lesson2.body': 'Soalan keselamatan direka sebagai <strong>kata laluan sandaran</strong> — tetapi orang ramai menganggap jawapannya sebagai fakta umum. Tiada siapa yang menyembunyikan tarikh lahir mereka. Semua orang membuat catatan tentang anjing mereka. Fakta-fakta ini kelihatan tidak berbahaya secara individu, tetapi bersama-sama ia menjadi kunci induk.<br><br>Tidak seperti kata laluan sebenar, jawapan soalan keselamatan tidak pernah berubah. Setelah penyerang menemuinya di media sosial, ia berfungsi <em>selama-lamanya</em>. Inilah sebabnya banyak penyelidik keselamatan menyebut soalan keselamatan sebagai salah satu pautan paling lemah dalam pengesahan moden.',
+    'lesson3.title': 'Cara Melindungi Diri Anda', 'lesson3.tag': 'Amalan terbaik',
+    'lesson3.body': 'Pertahanan paling berkesan adalah mudah: <strong>berbohong pada soalan keselamatan</strong>.<br><br>Apabila laman web bertanya "Apakah nama gadis ibu anda?", jangan jawab dengan benar. Anggap ia sebagai kata laluan kedua — taip sesuatu yang rawak sepenuhnya — dan simpan dalam <strong>pengurus kata laluan</strong> supaya anda tidak terlupa.',
+    'lesson3.tip.title': '✅ Tiga tabiat untuk dimulakan hari ini',
+    'lesson3.tip.body': '1. Gunakan jawapan rawak yang tidak dapat diteka untuk soalan keselamatan dan simpannya dalam pengurus kata laluan.<br>2. Jadikan profil media sosial anda peribadi, dan fikirkan dua kali sebelum menyiarkan tarikh lahir, nama haiwan peliharaan, atau kampung halaman.<br>3. Jika boleh, gunakan kunci laluan atau aplikasi pengesah dan bukannya soalan keselamatan.',
+
+    'footer.copy': '© 2026 SecureBank Berhad (123456-X) · Dilesenkan oleh Bank Negara Malaysia',
+    'footer.privacy': 'Dasar Privasi', 'footer.terms': 'Terma & Syarat',
+    'footer.security': 'Tips Keselamatan', 'footer.contact': 'Hubungi Kami',
+    'footer.security.lnk': 'Keselamatan', 'footer.fraud': 'Amaran Penipuan', 'footer.access': 'Kebolehcapaian',
+
+    'msg.no.user': 'Sila masukkan nama pengguna atau e-mel anda.',
+    'msg.no.pass': 'Sila masukkan kata laluan anda.',
+    'msg.wrong.pass': 'Nama pengguna atau kata laluan salah. Sila cuba lagi.',
+    'msg.locked': 'Beberapa percubaan gagal dikesan. Sila tetapkan semula kata laluan menggunakan pilihan "Lupa kata laluan?" di bawah.',
+    'msg.gate.fail': 'Kami tidak dapat menemui akaun dengan nama pengguna atau e-mel tersebut. Sila semak dan cuba lagi.',
+    'msg.sq.fail.prefix': 'Jawapan salah: ', 'msg.sq.fail.suffix': '. Semak profil semula dan cuba lagi.',
+    'msg.sq.field.pet': 'nama haiwan peliharaan', 'msg.sq.field.dob': 'tarikh lahir', 'msg.sq.field.city': 'bandar tempat membesar',
+    'msg.pass.mismatch': 'Kata laluan tidak sepadan. Sila cuba lagi.',
+    'crack.instantly': 'Serta-merta', 'crack.seconds': 'saat', 'crack.minutes': 'minit',
+    'crack.hours': 'jam', 'crack.days': 'hari', 'crack.months': 'bulan',
+    'crack.years': 'tahun', 'crack.kyears': 'ribu tahun', 'crack.centuries': 'Berabad-abad',
+
+    'debrief.hacker.badge': '★ Penggodam Pakar — Kata Laluan Diteka!',
+    'debrief.hacker.title': 'Anda memecahkan kata laluan secara langsung!',
+    'debrief.hacker.desc': 'Anda meneka kata laluan tepat Emma — mungkin kerana dia menggunakan butiran peribadi dari media sosialnya sebagai kata laluan. Inilah cara akaun sebenar dikompromi.',
+    'debrief.hacker.ans.title': 'Mengapa kata laluan boleh diteka',
+    'debrief.hacker.ans.row1.label': 'Kata laluan yang digunakan',
+    'debrief.osint.badge': 'Akaun Dibuka Melalui OSINT',
+    'debrief.osint.title': 'Anda berjaya masuk — tanpa kata laluan!',
+    'debrief.osint.desc': 'Anda menetapkan semula kata laluan Emma menggunakan jawapan yang ditemui di profil Instagram awamnya. Tiada alat penggodaman, tiada kemahiran teknikal — hanya membaca catatan awamnya.',
+    'debrief.osint.ans.title': 'Petunjuk ditemui di Instagram',
+  }
+};
+
+let lang = 'en';
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  document.getElementById('btn-bm').classList.toggle('active', l === 'bm');
+  document.documentElement.lang = l === 'bm' ? 'ms' : 'en';
+
+  // Update all static data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[l][key] !== undefined) el.innerHTML = T[l][key];
+  });
+
+  // Re-run strength display so crack label updates
+  checkStrength();
+}
+
+function t(key) { return T[lang][key] || T['en'][key] || key; }
+
+/* ── HELPERS ── */
+const VALID_USERS  = ['emma.j.2006', 'emma.johansson06@gmail.com'];
+const EXACT_PASSES = ['Finally18!!', 'Biscuit2006!'];
+let loginAttempts = 0;
+
+function goTo(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function showMsg(id, text, type) {
+  const el = document.getElementById(id);
+  el.innerHTML = text;
+  el.className = 'msg-box ' + type;
+}
+function clearMsg(id) {
+  const el = document.getElementById(id);
+  el.textContent = '';
+  el.className = 'msg-box';
+}
+
+/* ── PAGE 1 ── */
+function showForgotGate() {
+  document.getElementById('forgot-gate').classList.add('show');
+  document.getElementById('gate-user').focus();
+}
+
+function tryLogin() {
+  const user = document.getElementById('inp-user').value.trim();
+  const pass = document.getElementById('inp-pass').value;
+  const uEl = document.getElementById('inp-user');
+  const pEl = document.getElementById('inp-pass');
+  uEl.classList.remove('err'); pEl.classList.remove('err');
+
+  if (!user) { uEl.classList.add('err'); showMsg('login-msg', t('msg.no.user'), 'err'); return; }
+  if (!pass) { pEl.classList.add('err'); showMsg('login-msg', t('msg.no.pass'), 'err'); return; }
+
+  const userOk = VALID_USERS.includes(user.toLowerCase());
+  const passOk = EXACT_PASSES.includes(pass);
+
+  if (userOk && passOk) { showDebrief('hacker'); return; }
+
+  pEl.classList.add('err');
+  loginAttempts++;
+  showMsg('login-msg', loginAttempts >= 2 ? t('msg.locked') : t('msg.wrong.pass'), loginAttempts >= 2 ? 'warn' : 'err');
+}
+
+function tryGate() {
+  const val = document.getElementById('gate-user').value.trim().toLowerCase();
+  const el  = document.getElementById('gate-user');
+  el.classList.remove('err');
+  if (VALID_USERS.includes(val)) { clearMsg('gate-msg'); goTo('page-reset'); }
+  else { el.classList.add('err'); showMsg('gate-msg', t('msg.gate.fail'), 'err'); }
+}
+
+/* ── PAGE 2 ── */
+function trySecurityQs() {
+  const s1 = document.getElementById('sq1').value.trim().toLowerCase();
+  const s2 = document.getElementById('sq2').value.trim();
+  const s3 = document.getElementById('sq3').value.trim().toLowerCase();
+  const i1 = document.getElementById('sq1');
+  const i2 = document.getElementById('sq2');
+  const i3 = document.getElementById('sq3');
+  [i1,i2,i3].forEach(i => i.classList.remove('err','ok'));
+
+  const a1 = s1 === 'biscuit';
+  const a2 = ['14/03/2006','14-03-2006','14032006','14/3/2006'].includes(s2);
+  const a3 = s3.includes('sunshine');
+
+  i1.classList.add(a1 ? 'ok' : 'err');
+  i2.classList.add(a2 ? 'ok' : 'err');
+  i3.classList.add(a3 ? 'ok' : 'err');
+
+  if (a1 && a2 && a3) {
+    clearMsg('sq-msg');
+    document.getElementById('new-pass-section').classList.add('show');
+    document.getElementById('new-pass').focus();
+  } else {
+    const wrong = [];
+    if (!a1) wrong.push(t('msg.sq.field.pet'));
+    if (!a2) wrong.push(t('msg.sq.field.dob'));
+    if (!a3) wrong.push(t('msg.sq.field.city'));
+    showMsg('sq-msg', t('msg.sq.fail.prefix') + wrong.join(', ') + t('msg.sq.fail.suffix'), 'err');
+  }
+}
+
+/* ── STRENGTH METER ── */
+function checkStrength() {
+  const val = document.getElementById('new-pass').value;
+  const btn = document.getElementById('btn-confirm-reset');
+  if (!btn) return;
+
+  document.getElementById('char-count').textContent = val.length;
+
+  const hasUpper = /[A-Z]/.test(val);
+  const hasLower = /[a-z]/.test(val);
+  const hasNum   = /[0-9]/.test(val);
+  const hasSym   = /[^A-Za-z0-9]/.test(val);
+  const hasLen   = val.length >= 12;
+
+  ['chip-up','chip-low','chip-num','chip-sym','chip-len'].forEach(id =>
+    document.getElementById(id) && document.getElementById(id).classList.remove('active')
+  );
+  if (hasUpper) document.getElementById('chip-up').classList.add('active');
+  if (hasLower) document.getElementById('chip-low').classList.add('active');
+  if (hasNum)   document.getElementById('chip-num').classList.add('active');
+  if (hasSym)   document.getElementById('chip-sym').classList.add('active');
+  if (hasLen)   document.getElementById('chip-len').classList.add('active');
+
+  const crackEl = document.getElementById('crack-time');
+  const len = val.length;
+  let crackText = '—', crackCls = 'instantly', score = 0;
+
+  if (len > 0) {
+    let charset = 0;
+    if (hasLower) charset += 26; if (hasUpper) charset += 26;
+    if (hasNum)   charset += 10; if (hasSym)   charset += 32;
+    if (charset === 0) charset = 26;
+
+    const logSec = len * Math.log10(charset) - Math.log10(1e10);
+    const seconds = Math.pow(10, logSec);
+    const minutes = seconds / 60, hours = minutes / 60;
+    const days = hours / 24, years = days / 365;
+
+    if (seconds < 1)       { crackText = t('crack.instantly');                         crackCls = 'instantly'; }
+    else if (seconds < 60) { crackText = Math.round(seconds) + ' ' + t('crack.seconds'); crackCls = 'instantly'; }
+    else if (minutes < 60) { crackText = Math.round(minutes) + ' ' + t('crack.minutes'); crackCls = 'weak'; }
+    else if (hours < 24)   { crackText = Math.round(hours)   + ' ' + t('crack.hours');   crackCls = 'weak'; }
+    else if (days < 30)    { crackText = Math.round(days)    + ' ' + t('crack.days');    crackCls = 'medium'; }
+    else if (days < 365)   { crackText = Math.round(days/30) + ' ' + t('crack.months');  crackCls = 'medium'; }
+    else if (years < 1000) { crackText = Math.round(years)   + ' ' + t('crack.years');   crackCls = 'strong'; }
+    else if (years < 1e6)  { crackText = Math.round(years/1000) + ' ' + t('crack.kyears'); crackCls = 'strong'; }
+    else                   { crackText = t('crack.centuries');                           crackCls = 'strong'; }
+
+    if (days >= 1) score = 1;
+    if (years >= 1) score = 2;
+  }
+
+  crackEl.textContent = crackText;
+  crackEl.className = 'strength-crack-time ' + crackCls;
+  btn.disabled = !(score >= 1 && val.length > 0);
+}
+
+function confirmReset() {
+  const np = document.getElementById('new-pass').value;
+  const cp = document.getElementById('confirm-pass').value;
+  if (np !== cp) {
+    showMsg('confirm-msg', t('msg.pass.mismatch'), 'err');
+    document.getElementById('confirm-pass').classList.add('err');
+    return;
+  }
+  showDebrief('osint');
+}
+
+/* ── DEBRIEF ── */
+function showDebrief(route) {
+  const top   = document.getElementById('debrief-top');
+  const icon  = document.getElementById('debrief-icon');
+  const badge = document.getElementById('debrief-badge');
+  const title = document.getElementById('debrief-title');
+  const desc  = document.getElementById('debrief-desc');
+  const ansTitle = document.getElementById('debrief-answers-title');
+  const rowDob  = document.getElementById('ans-row-dob');
+  const rowCity = document.getElementById('ans-row-city');
+
+  top.className = 'debrief-top route-' + route;
+
+  if (route === 'hacker') {
+    icon.textContent = '🏆';
+    badge.textContent = t('debrief.hacker.badge');
+    title.textContent = t('debrief.hacker.title');
+    desc.textContent  = t('debrief.hacker.desc');
+    ansTitle.textContent = t('debrief.hacker.ans.title');
+    document.querySelector('#debrief-answers .answer-row span:first-child').textContent = t('debrief.hacker.ans.row1.label');
+    document.querySelector('#debrief-answers .answer-row span:last-child').textContent  = 'Finally18!! / Biscuit2006!';
+    rowDob.style.display  = 'none';
+    rowCity.style.display = 'none';
+  } else {
+    icon.textContent = '🔓';
+    badge.textContent = t('debrief.osint.badge');
+    title.textContent = t('debrief.osint.title');
+    desc.textContent  = t('debrief.osint.desc');
+    ansTitle.textContent = t('debrief.osint.ans.title');
+    document.querySelector('#debrief-answers .answer-row span:first-child').textContent = t('debrief.ans.pet');
+    document.querySelector('#debrief-answers .answer-row span:last-child').textContent  = 'Biscuit';
+    rowDob.style.display  = '';
+    rowCity.style.display = '';
+  }
+
+  goTo('page-debrief');
+}
+</script>
+</body>
+</html>
