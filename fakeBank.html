@@ -608,7 +608,7 @@ function t(key) { return T[lang][key] || T['en'][key] || key; }
 
 /* ── HELPERS ── */
 const VALID_USERS  = ['emma.j.2006', 'emma.johansson06@gmail.com'];
-const EXACT_PASSES = ['Finally18!!', 'Biscuit2006!'];
+const EXACT_PASSES = ['Finally20!!', 'Biscuit2006!', 'Emma2006'];
 let loginAttempts = 0;
 
 function goTo(id) {
@@ -780,7 +780,7 @@ function showDebrief(route) {
     desc.textContent  = t('debrief.hacker.desc');
     ansTitle.textContent = t('debrief.hacker.ans.title');
     document.querySelector('#debrief-answers .answer-row span:first-child').textContent = t('debrief.hacker.ans.row1.label');
-    document.querySelector('#debrief-answers .answer-row span:last-child').textContent  = 'Finally18!! / Biscuit2006!';
+    document.querySelector('#debrief-answers .answer-row span:last-child').textContent  = 'Finally20!! / Biscuit2006! / Emma2006';
     rowDob.style.display  = 'none';
     rowCity.style.display = 'none';
   } else {
