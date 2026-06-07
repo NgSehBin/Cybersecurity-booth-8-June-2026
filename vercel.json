@@ -1,8 +1,9 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/",
-      "destination": "fake Acc.html"
+      "destination": "/fakeBank.html"
     }
   ]
 }
